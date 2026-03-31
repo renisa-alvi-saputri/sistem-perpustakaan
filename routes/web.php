@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PeminjamanController;
+
 Route::redirect('/', '/login');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::resource('buku', BukuController::class);
     Route::resource('anggota', AnggotaController::class);
     Route::resource('peminjaman', PeminjamanController::class);
+    Route::put('/peminjaman/{id}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+    Route::get('/pengembalian', [PeminjamanController::class, 'pengembalian'])->name('pengembalian.index');
+    Route::post('/pengembalian', [PeminjamanController::class, 'storePengembalian'])->name('pengembalian.store');
 
     // ================= PROFILE =================
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

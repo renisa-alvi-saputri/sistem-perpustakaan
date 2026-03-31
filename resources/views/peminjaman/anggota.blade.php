@@ -4,33 +4,37 @@
 
 @section('content')
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
+<div class="px-4 py-4">
 
-    <table class="w-full text-sm text-center border">
+    <div class="bg-white rounded-xl shadow overflow-hidden">
 
-        <thead class="bg-gray-100 text-gray-600">
-            <tr>
-                <th class="py-3 border">Buku</th>
-                <th class="py-3 border">Tgl Pinjam</th>
-                <th class="py-3 border">Tgl Kembali</th>
-                <th class="py-3 border">Status</th>
-            </tr>
-        </thead>
+        <table class="w-full text-sm text-center border">
 
-        <tbody>
-            @foreach ($peminjaman as $p)
-                @if ($p->user_id == auth()->id())
-                    <tr>
-                        <td class="border">{{ $p->buku->judul }}</td>
-                        <td class="border">{{ $p->tgl_pinjam }}</td>
-                        <td class="border">{{ $p->tgl_kembali }}</td>
-                        <td class="border text-blue-600">{{ $p->status }}</td>
-                    </tr>
-                @endif
-            @endforeach
-        </tbody>
+            <thead class="bg-gray-100 text-gray-600">
+                <tr>
+                    <th class="py-3 px-4 border">Buku</th>
+                    <th class="py-3 px-4 border">Tgl Pinjam</th>
+                    <th class="py-3 px-4 border">Tgl Kembali</th>
+                    <th class="py-3 px-4 border">Status</th>
+                </tr>
+            </thead>
 
-    </table>
+            <tbody>
+                @foreach ($peminjaman as $p)
+                    @if ($p->user_id == auth()->id())
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
+                            <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
+                            <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
+                            <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
+                        </tr>
+                    @endif
+                @endforeach
+            </tbody>
+
+        </table>
+
+    </div>
 
 </div>
 

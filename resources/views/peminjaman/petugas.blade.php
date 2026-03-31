@@ -16,25 +16,25 @@
 
             <thead class="bg-gray-100 text-gray-600">
                 <tr>
-                    <th class="py-3 border">No</th>
-                    <th class="py-3 border">Nama</th>
-                    <th class="py-3 border">Buku</th>
-                    <th class="py-3 border">Tgl Pinjam</th>
-                    <th class="py-3 border">Tgl Kembali</th>
-                    <th class="py-3 border">Status</th>
-                    <th class="py-3 border">Aksi</th>
+                    <th class="py-3 px-4 border">No</th>
+                    <th class="py-3 px-4 border">Nama</th>
+                    <th class="py-3 px-4 border">Buku</th>
+                    <th class="py-3 px-4 border">Tgl Pinjam</th>
+                    <th class="py-3 px-4 border">Tgl Kembali</th>
+                    <th class="py-3 px-4 border">Status</th>
+                    <th class="py-3 px-4 border">Aksi</th>
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($peminjaman as $p)
                     <tr>
-                        <td class="border">{{ $loop->iteration }}</td>
-                        <td class="border">{{ $p->user->name }}</td>
-                        <td class="border">{{ $p->buku->judul }}</td>
-                        <td class="border">{{ $p->tgl_pinjam }}</td>
-                        <td class="border">{{ $p->tgl_kembali }}</td>
-                        <td class="border text-blue-600">{{ $p->status }}</td>
+                        <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
+                        <td class="py-2 px-4 border">{{ $p->user->name }}</td>
+                        <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
+                        <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
+                        <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
+                        <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
 
                         <td class="border">
                             <div class="flex justify-center gap-2">
