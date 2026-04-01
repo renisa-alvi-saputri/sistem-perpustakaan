@@ -4,12 +4,6 @@
 
 @section('content')
 
-    <div class="flex gap-4 mb-6 items-center">
-        <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow">
-            + Peminjaman
-        </button>
-    </div>
-
     <!-- TABEL -->
     <div class="bg-white rounded-xl shadow overflow-hidden">
         <table class="w-full text-sm text-center border">
@@ -33,7 +27,13 @@
                         <td class="py-2 px-4 border">{{ $p->user->name }}</td>
                         <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                         <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
-                        <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
+                        <td class="py-2 px-4 border">
+                            @if ($p->status === 'dikembalikan')
+                                {{ $p->tgl_dikembalikan }}
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
 
                         <td class="border">
@@ -64,45 +64,6 @@
         </table>
     </div>
 
-    <!-- ================= MODAL TAMBAH ================= -->
-    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-
-        <div class="bg-white p-6 rounded-xl w-96">
-
-            <h2 class="text-lg font-semibold mb-4">Tambah Peminjaman</h2>
-
-            <form method="POST" action="{{ route('peminjaman.store') }}">
-                @csrf
-
-                <select name="user_id" class="w-full border p-2 mb-2 rounded">
-                    @foreach ($anggota as $a)
-                        <option value="{{ $a->id }}">{{ $a->name }}</option>
-                    @endforeach
-                </select>
-
-                <select name="buku_id" class="w-full border p-2 mb-2 rounded">
-                    @foreach ($buku as $b)
-                        <option value="{{ $b->id }}">{{ $b->judul }}</option>
-                    @endforeach
-                </select>
-
-                <input type="date" name="tgl_pinjam" class="w-full border p-2 mb-2 rounded">
-                <input type="date" name="tgl_kembali" class="w-full border p-2 mb-2 rounded">
-
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeModal()" class="bg-gray-400 px-3 py-1 text-white rounded">
-                        Batal
-                    </button>
-                    <button class="bg-[#5C7F9C] px-3 py-1 text-white rounded">
-                        Simpan
-                    </button>
-                </div>
-
-            </form>
-
-        </div>
-    </div>
-
     <!-- ================= MODAL EDIT ================= -->
     <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
 
@@ -114,20 +75,15 @@
                 @csrf
                 @method('PUT')
 
-                <select name="user_id" id="editUser" class="w-full border p-2 mb-2 rounded">
-                    @foreach ($anggota as $a)
-                        <option value="{{ $a->id }}">{{ $a->name }}</option>
-                    @endforeach
-                </select>
+                <div class="mb-2">
+                    <label class="text-sm text-gray-600">Tanggal Pinjam</label>
+                    <input type="date" id="editPinjam" name="tgl_pinjam" class="w-full border p-2 rounded">
+                </div>
 
-                <select name="buku_id" id="editBuku" class="w-full border p-2 mb-2 rounded">
-                    @foreach ($buku as $b)
-                        <option value="{{ $b->id }}">{{ $b->judul }}</option>
-                    @endforeach
-                </select>
-
-                <input type="date" id="editPinjam" name="tgl_pinjam" class="w-full border p-2 mb-2 rounded">
-                <input type="date" id="editKembali" name="tgl_kembali" class="w-full border p-2 mb-2 rounded">
+                <div class="mb-4">
+                    <label class="text-sm text-gray-600">Tanggal Kembali</label>
+                    <input type="date" id="editKembali" name="tgl_kembali" class="w-full border p-2 rounded">
+                </div>
 
                 <div class="flex justify-end gap-2">
                     <button type="button" onclick="closeEdit()" class="bg-gray-400 px-3 py-1 text-white rounded">
@@ -145,19 +101,9 @@
 
     <!-- ================= SCRIPT ================= -->
     <script>
-        function openModal() {
-            document.getElementById('modal').classList.remove('hidden')
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.add('hidden')
-        }
-
         function editPinjam(id, user_id, buku_id, tgl_pinjam, tgl_kembali) {
             document.getElementById('modalEdit').classList.remove('hidden');
 
-            document.getElementById('editUser').value = user_id;
-            document.getElementById('editBuku').value = buku_id;
             document.getElementById('editPinjam').value = tgl_pinjam;
             document.getElementById('editKembali').value = tgl_kembali;
 

@@ -101,25 +101,20 @@
                 Pinjam Buku
             </h2>
 
-            <p id="namaBuku" class="text-sm text-gray-600 mb-3"></p>
+            <p id="namaBuku" class="text-sm text-gray-600 mb-4"></p>
 
             <form method="POST" action="{{ route('peminjaman.store') }}">
                 @csrf
 
+                <!-- Hidden input untuk ID buku -->
                 <input type="hidden" name="buku_id" id="pinjamBukuId">
 
-                <label class="text-sm">Tanggal Pinjam</label>
-                <input type="date" name="tgl_pinjam" class="w-full border p-2 mb-2 rounded">
-
-                <label class="text-sm">Tanggal Kembali</label>
-                <input type="date" name="tgl_kembali" class="w-full border p-2 mb-3 rounded">
-
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closePinjam()" class="bg-gray-400 text-white px-3 py-1 rounded">
+                    <button type="button" onclick="closePinjam()" class="bg-gray-400 text-white px-4 py-2 rounded">
                         Batal
                     </button>
 
-                    <button class="bg-green-500 text-white px-3 py-1 rounded">
+                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
                         Pinjam
                     </button>
                 </div>

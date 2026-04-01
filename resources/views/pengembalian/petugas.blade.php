@@ -4,17 +4,17 @@
 
 @section('content')
 
-    <div class="px-2 py-2">
+    <div class="p-0">
 
         <!-- BUTTON -->
-        <div class="flex gap-4 mb-6 items-center">
+        <div class="flex gap-4 items-center mb-2">
             <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow hover:bg-[#4a6d87]">
                 + Pengembalian
             </button>
         </div>
 
         <!-- TABEL -->
-        <div class="bg-white rounded-xl shadow overflow-hidden mt-4">
+        <div class="bg-white rounded-xl shadow overflow-hidden mt-6">
 
             <table class="w-full text-sm text-center border">
 
@@ -45,7 +45,6 @@
             </table>
 
         </div>
-
     </div>
 
     <!-- ================= MODAL ================= -->

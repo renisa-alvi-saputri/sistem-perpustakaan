@@ -5,11 +5,6 @@
 @section('content')
     <div class="flex items-center gap-4 mb-6">
 
-        <!-- BUTTON -->
-        <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow whitespace-nowrap">
-            + Anggota
-        </button>
-
         <!-- SEARCH -->
         <form method="GET" action="{{ route('anggota.index') }}" class="flex-1">
             <input type="text" name="search" placeholder="Cari anggota..." value="{{ request('search') }}"

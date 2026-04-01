@@ -50,6 +50,17 @@
                     </a>
                 </li>
 
+                <!-- Kategori -->
+                <li>
+                    <a href="/kategori"
+                        class="flex items-center gap-3 px-4 py-3 text-lg
+            {{ request()->is('kategori') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+
+                        <i class="fa-solid fa-list w-6 text-center"></i>
+                        Kategori
+                    </a>
+                </li>
+
                 <!-- Buku -->
                 <li>
                     <a href="/buku"
@@ -61,16 +72,6 @@
                     </a>
                 </li>
 
-                <!-- Kategori -->
-                <li>
-                    <a href="/kategori"
-                        class="flex items-center gap-3 px-4 py-3 text-lg
-            {{ request()->is('kategori') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
-
-                        <i class="fa-solid fa-list w-6 text-center"></i>
-                        Kategori
-                    </a>
-                </li>
 
                 <!-- Anggota -->
                 <li>
@@ -140,6 +141,16 @@
                     </a>
                 </li>
 
+                <!-- Pengembalian -->
+                <li>
+                    <a href="/pengembalian"
+                        class="flex items-center gap-3 px-4 py-3 text-lg
+            {{ request()->is('pengembalian*') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+
+                        <i class="fa-solid fa-rotate-left w-6 text-center"></i>
+                        Pengembalian
+                    </a>
+                </li>
             @endif
 
             <!-- Dashboard Kepala -->
@@ -173,17 +184,6 @@
 
                         <i class="fa-solid fa-user-pen w-6 text-center"></i>
                         Peminjaman
-                    </a>
-                </li>
-
-                <!-- Pengembalian -->
-                <li>
-                    <a href="/pengembalian"
-                        class="flex items-center gap-3 px-4 py-3 text-lg
-            {{ request()->is('pengembalian') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
-
-                        <i class="fa-solid fa-rotate-left w-6 text-center"></i>
-                        Pengembalian
                     </a>
                 </li>
             @endif

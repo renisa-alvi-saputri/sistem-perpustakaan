@@ -13,7 +13,9 @@ class Peminjaman extends Model
         'buku_id',
         'tgl_pinjam',
         'tgl_kembali',
-        'status'
+        'tgl_dikembalikan',
+        'status',
+        'denda'
     ];
 
     // RELASI KE USER
