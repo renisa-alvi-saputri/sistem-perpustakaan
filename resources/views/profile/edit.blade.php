@@ -77,7 +77,7 @@
                         </a>
 
                         <button
-                            class="bg-green-500 text-white px-3 py-1.5 text-sm rounded hover:bg-green-600">
+                            class="bg-green-500 text-white px-3 py-1.5 text-sm rounded hover:bg-green-400">
                             Simpan
                         </button>
                     </div>

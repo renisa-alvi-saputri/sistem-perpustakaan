@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pengembalian Buku')
+@section('title', 'Pengembalian')
 
 @section('content')
 
@@ -13,7 +13,7 @@
 
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
         <div class="bg-white p-6 rounded-xl w-96 shadow-lg">
-            <h3 class="text-lg font-semibold mb-4 text-[#5C7F9C]">Form Pengembalian</h3>
+            <h3 class="text-lg font-semibold mb-4 text-[#5C7F9C] text-center">Pengembalian</h3>
 
             @if ($peminjaman->isEmpty())
                 <div class="p-4 bg-yellow-100 border border-yellow-300 rounded text-yellow-700 mb-4">Tidak ada buku yang
@@ -38,7 +38,7 @@
 
                     <div class="flex justify-end gap-2">
                         <button type="button" onclick="closeModal()"
-                            class="bg-gray-400 px-3 py-1 text-white rounded">Batal</button>
+                            class="bg-gray-400 px-3 py-1 text-white rounded hover:bg-gray-500">Batal</button>
                         <button type="submit"
                             class="bg-green-500 px-3 py-1 text-white rounded hover:bg-green-600">Kembalikan</button>
                     </div>

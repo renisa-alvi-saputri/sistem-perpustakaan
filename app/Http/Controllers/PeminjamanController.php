@@ -105,8 +105,10 @@ class PeminjamanController extends Controller
             return redirect()->route('pengembalian.anggota');
         }
 
+        // Ambil semua peminjaman yang sudah dikembalikan
         $peminjaman = Peminjaman::with('user', 'buku')
-            ->where('status', 'dipinjam')
+            ->where('status', 'dikembalikan')   // status menjadi 'dikembalikan'
+            ->orderBy('tgl_dikembalikan', 'desc') //
             ->get();
 
         return view('pengembalian.petugas', compact('peminjaman'));
@@ -118,7 +120,7 @@ class PeminjamanController extends Controller
     public function storePengembalian(Request $request)
     {
         $request->validate([
-            'peminjaman_id' => 'required|exists:peminjamans,id'
+            'peminjaman_id' => 'required|exists:peminjaman,id'
         ]);
 
         $peminjaman = Peminjaman::findOrFail($request->peminjaman_id);
@@ -166,7 +168,7 @@ class PeminjamanController extends Controller
     public function storePengembalianAnggota(Request $request)
     {
         $request->validate([
-            'peminjaman_id' => 'required|exists:peminjamans,id'
+            'peminjaman_id' => 'required|exists:peminjaman,id'
         ]);
 
         $peminjaman = Peminjaman::findOrFail($request->peminjaman_id);

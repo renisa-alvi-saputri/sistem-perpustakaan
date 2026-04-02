@@ -85,7 +85,7 @@
             </div>
 
             <!-- BUTTON -->
-            <button onclick="closeDetail()" class="mt-4 bg-gray-500 text-white px-4 py-1 rounded-lg hover:bg-gray-400">
+            <button onclick="closeDetail()" class="mt-4 bg-gray-400 text-white px-4 py-1 rounded-lg hover:bg-gray-500">
                 Tutup
             </button>
 
@@ -95,30 +95,35 @@
     <!-- ================= MODAL PINJAM ================= -->
     <div id="modalPinjam" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
 
-        <div class="bg-white p-6 rounded-xl w-80 shadow">
+        <div class="bg-white w-96 p-6 rounded-2xl shadow-lg">
 
-            <h2 class="text-lg font-semibold mb-3 text-[#5C7F9C]">
+            <!-- Judul -->
+            <h2 class="text-lg font-semibold text-[#5C7F9C] mb-2 text-center">
                 Pinjam Buku
             </h2>
 
-            <p id="namaBuku" class="text-sm text-gray-600 mb-4"></p>
+            <!-- Nama Buku -->
+            <p id="namaBuku" class="text-sm text-gray-500 mb-5 text-center"></p>
 
             <form method="POST" action="{{ route('peminjaman.store') }}">
                 @csrf
 
-                <!-- Hidden input untuk ID buku -->
+                <!-- Hidden input -->
                 <input type="hidden" name="buku_id" id="pinjamBukuId">
 
-                <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closePinjam()" class="bg-gray-400 text-white px-4 py-2 rounded">
+                <!-- Button -->
+                <div class="flex justify-center gap-3 mt-4">
+
+                    <button type="button" onclick="closePinjam()"
+                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition">
                         Batal
                     </button>
 
-                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">
+                    <button type="submit"
+                        class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition">
                         Pinjam
                     </button>
                 </div>
-
             </form>
 
         </div>
@@ -147,10 +152,10 @@
             document.getElementById('modalDetail').classList.add('hidden');
         }
 
-        function openPinjam(id, judul) {
+        function openPinjam(bukuId, bukuNama) {
             document.getElementById('modalPinjam').classList.remove('hidden');
-            document.getElementById('pinjamBukuId').value = id;
-            document.getElementById('namaBuku').innerText = "Buku: " + judul;
+            document.getElementById('pinjamBukuId').value = bukuId;
+            document.getElementById('namaBuku').innerText = bukuNama;
         }
 
         function closePinjam() {

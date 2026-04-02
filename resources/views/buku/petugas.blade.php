@@ -200,7 +200,7 @@
                 <p id="detailStok"></p>
             </div>
 
-            <button onclick="closeDetail()" class="mt-4 bg-gray-500 text-white px-4 py-1 rounded-lg hover:bg-gray-400">
+            <button onclick="closeDetail()" class="mt-4 bg-gray-400 text-white px-4 py-1 rounded-lg hover:bg-gray-500">
                 Tutup
             </button>
 
