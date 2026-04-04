@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Peminjaman')
+@section('title', 'Riwayat')
 
 @section('content')
 
@@ -13,6 +13,7 @@
                         <th class="py-3 px-4 border">Buku</th>
                         <th class="py-3 px-4 border">Tgl Pinjam</th>
                         <th class="py-3 px-4 border">Jatuh Tempo</th>
+                        <th class="py-3 px-4 border">Tgl Kembali</th>
                         <th class="py-3 px-4 border">Status</th>
                     </tr>
                 </thead>
@@ -24,6 +25,7 @@
                             <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                             <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
                             <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
+                            <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
                             <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
                         </tr>
                     @endforeach

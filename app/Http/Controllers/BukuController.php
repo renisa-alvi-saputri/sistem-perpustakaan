@@ -14,7 +14,7 @@ class BukuController extends Controller
     {
         $query = Buku::with('kategori');
 
-        // SEARCH 
+        // SEARCH
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('judul', 'like', '%' . $request->search . '%')

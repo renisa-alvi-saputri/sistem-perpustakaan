@@ -47,6 +47,35 @@
         </div>
     </div>
 
+    <!-- TABEL BUKU YANG DIPINJAM ANGGOTA -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
+        <table class="w-full text-sm text-center border">
+            <thead class="bg-gray-100 text-gray-600">
+                <tr>
+                    <th class="py-3 px-4 border">No</th>
+                    <th class="border">Buku</th>
+                    <th class="border">Tgl Pinjam</th>
+                    <th class="border">Jatuh Tempo</th>
+                    <th class="border">Tgl Kembali</th>
+                    <th class="border">Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach ($riwayatPengembalian as $p)
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
+                        <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
+                        <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
+                        <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
+                        <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
+                        <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
     <script>
         function openModal() {
             document.getElementById('modal').classList.remove('hidden');
@@ -57,29 +86,5 @@
         }
     </script>
 
-    <!-- TABEL BUKU YANG DIPINJAM ANGGOTA -->
-    <div class="bg-white rounded-xl shadow overflow-hidden">
-        <table class="w-full text-sm text-center border">
-            <thead class="bg-gray-100 text-gray-600">
-                <tr>
-                    <th class="py-3 px-4 border">No</th>
-                    <th class="border">Buku</th>
-                    <th class="border">Tgl Pinjam</th>
-                    <th class="border">Status</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach ($peminjaman as $p)
-                    <tr class="hover:bg-gray-50">
-                        <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
-                        <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
-                        <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
-                        <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
 
 @endsection

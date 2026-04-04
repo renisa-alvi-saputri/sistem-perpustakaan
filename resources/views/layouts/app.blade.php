@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>E-Perpustakaan</title>
+    <title>S-Perpustakaan</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -20,7 +20,7 @@
         <div class="flex items-center gap-3 h-16 px-4 border-b">
             <img src="{{ asset('images/logoapk.png') }}" class="w-10">
             <div>
-                <h2 class="font-bold text-gray-600">E-Perpustakaan</h2>
+                <h2 class="font-bold text-gray-600">S-Perpustakaan</h2>
 
                 @if (auth()->user()->role == 'petugas')
                     <p class="text-sm text-gray-500">Petugas</p>
@@ -130,14 +130,14 @@
                     </a>
                 </li>
 
-                <!-- Pinjam Buku -->
+                <!-- Peminjaman -->
                 <li>
                     <a href="/peminjaman"
                         class="flex items-center gap-3 px-4 py-3 text-lg
             {{ request()->is('peminjaman') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
 
                         <i class="fa-solid fa-user-pen w-6 text-center"></i>
-                        Riwayat Pinjam
+                        Peminjaman
                     </a>
                 </li>
 
@@ -149,6 +149,16 @@
 
                         <i class="fa-solid fa-rotate-left w-6 text-center"></i>
                         Pengembalian
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/riwayat"
+                        class="flex items-center gap-3 px-4 py-3 text-lg
+            {{ request()->is('riwayat') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+
+                        <i class="fa-solid fa-clock-rotate-left w-6 text-center"></i>
+                        Riwayat
                     </a>
                 </li>
             @endif

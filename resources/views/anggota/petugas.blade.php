@@ -5,6 +5,11 @@
 @section('content')
     <div class="flex items-center gap-4 mb-6">
 
+        <!-- BUTTON -->
+        <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow">
+            + Kategori
+        </button>
+
         <!-- SEARCH -->
         <form method="GET" action="{{ route('anggota.index') }}" class="flex-1">
             <input type="text" name="search" placeholder="Cari anggota..." value="{{ request('search') }}"
@@ -61,80 +66,81 @@
 
     </div>
 
-    <!-- ================= MODAL TAMBAH ================ -->
+    <!-- ================= MODAL TAMBAH ANGGOTA ================= -->
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
 
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">
-                Tambah Anggota
-            </h2>
+            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Tambah Anggota</h2>
 
-            <form method="POST" action="{{ route('anggota.store') }}" class="space-y-3">
+            <form method="POST" action="{{ route('anggota.store') }}" class="space-y-2">
                 @csrf
 
-                <input type="text" name="name" placeholder="Nama"
+                <!-- Nama -->
+                <label for="name" class="text-gray-500 text-sm block mb-1">Nama</label>
+                <input type="text" name="name" id="name" placeholder="Masukkan nama"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="email" name="email" placeholder="Email"
+                <!-- Email -->
+                <label for="email" class="text-gray-500 text-sm block mb-1">Email</label>
+                <input type="email" name="email" id="email" placeholder="Masukkan email"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <select name="jenis_kelamin"
+                <!-- Jenis Kelamin -->
+                <label for="jenis_kelamin" class="text-gray-500 text-sm block mb-1">Jenis Kelamin</label>
+                <select name="jenis_kelamin" id="jenis_kelamin"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-
                     <option value="">Pilih Jenis Kelamin</option>
                     <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
 
+                <!-- Tombol -->
                 <div class="flex justify-end gap-2 pt-2">
-
                     <button type="button" onclick="closeModal()"
                         class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
                     </button>
 
-                    <button class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
+                    <button type="submit" class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
                         Simpan
                     </button>
-
                 </div>
 
             </form>
 
         </div>
-
-    </div>
     </div>
 
-    <!-- ================= MODAL EDIT ================= -->
+    <!-- ================= MODAL EDIT ANGGOTA ================= -->
     <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-
         <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">
-                Edit Anggota
-            </h2>
+            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">Edit Anggota</h2>
 
-            <form method="POST" id="formEdit" class="space-y-3">
+            <form method="POST" id="formEdit">
                 @csrf
                 @method('PUT')
 
+                <!-- Nama -->
+                <label for="editNama" class="text-gray-500 text-sm block mb-1">Nama</label>
                 <input type="text" id="editNama" name="name" placeholder="Nama"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
+                <!-- Email -->
+                <label for="editEmail" class="text-gray-500 text-sm block mt-2 mb-1">Email</label>
                 <input type="email" id="editEmail" name="email" placeholder="Email"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
+                <!-- Jenis Kelamin -->
+                <label for="editJK" class="text-gray-500 text-sm block mt-2 mb-1">Jenis Kelamin</label>
                 <select id="editJK" name="jenis_kelamin"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-
                     <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
 
                 <div class="flex justify-end gap-2 pt-2">
-
                     <button type="button" onclick="closeEdit()"
                         class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
@@ -143,13 +149,11 @@
                     <button class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">
                         Update
                     </button>
-
                 </div>
 
             </form>
 
         </div>
-
     </div>
 
     <!-- ================= MODAL DELETE ================= -->

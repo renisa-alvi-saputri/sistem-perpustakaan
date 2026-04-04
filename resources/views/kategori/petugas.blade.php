@@ -63,71 +63,74 @@
 
     <!-- ================= MODAL TAMBAH KATEGORI ================= -->
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
 
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Tambah Kategori</h2>
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">
-                Tambah Kategori
-            </h2>
-
-            <form method="POST" action="{{ route('kategori.store') }}" class="space-y-3">
+            <form method="POST" action="{{ route('kategori.store') }}" class="space-y-2">
                 @csrf
 
-                <input type="text" name="nama_kategori" placeholder="Nama kategori"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                <!-- Label dan Input Nama Kategori -->
+                <input type="text" name="nama_kategori" id="nama_kategori" placeholder="Masukkan Nama Kategori"
+                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none"
+                    value="{{ old('nama_kategori') }}">
 
+                <!-- Pesan Error -->
+                @error('nama_kategori')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+
+                <!-- Tombol -->
                 <div class="flex justify-end gap-2 pt-2">
-
                     <button type="button" onclick="closeModal()"
                         class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
                     </button>
 
-                    <button class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
+                    <button type="submit" class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
                         Simpan
                     </button>
-
                 </div>
 
             </form>
-
         </div>
-
     </div>
 
     <!-- ================= MODAL EDIT KATEGORI ================= -->
     <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
 
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Edit Kategori</h2>
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">
-                Edit Kategori
-            </h2>
-
-            <form method="POST" id="formEdit" class="space-y-3">
+            <form method="POST" id="formEdit" class="space-y-2">
                 @csrf
                 @method('PUT')
 
+                <!-- Nama Kategori -->
+                <label for="editNama" class="text-gray-500 text-sm block mb-1">Nama Kategori</label>
                 <input type="text" name="nama_kategori" id="editNama"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none"
+                    placeholder="Masukkan Nama Kategori">
 
+                <!-- Pesan Error jika duplikat -->
+                @error('nama_kategori')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+
+                <!-- Tombol -->
                 <div class="flex justify-end gap-2 pt-2">
-
                     <button type="button" onclick="closeEdit()"
                         class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
                     </button>
 
-                    <button class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">
+                    <button type="submit" class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">
                         Update
                     </button>
-
                 </div>
-
             </form>
 
         </div>
-
     </div>
 
     <!-- ================= MODAL DELETE KATEGORI ================= -->
@@ -205,4 +208,21 @@
             document.getElementById('modalDelete').classList.add('hidden');
         }
     </script>
+
+    <!-- ================= SCRIPT MODAL ================= -->
+    <script>
+        function openModal() {
+            document.getElementById('modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.add('hidden');
+        }
+
+        // Jika ada error, buka modal otomatis
+        @if ($errors->has('nama_kategori'))
+            openModal();
+        @endif
+    </script>
+
 @endsection

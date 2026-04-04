@@ -81,76 +81,94 @@
 
     <!-- ================= MODAL TAMBAH ================= -->
     <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
 
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Tambah Buku</h2>
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">Tambah Buku</h2>
-
-            <form method="POST" action="{{ route('buku.store') }}" enctype="multipart/form-data" class="space-y-3">
+            <form method="POST" action="{{ route('buku.store') }}" enctype="multipart/form-data" class="space-y-2">
                 @csrf
 
-                <input type="text" name="judul" placeholder="Judul"
+                <!-- Judul -->
+                <label for="judul" class="text-gray-500 text-sm block mb-1">Judul Buku</label>
+                <input type="text" name="judul" id="judul" placeholder="Masukkan judul buku"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="text" name="penulis" placeholder="Penulis"
+                <!-- Penulis -->
+                <label for="penulis" class="text-gray-500 text-sm block mb-1">Penulis</label>
+                <input type="text" name="penulis" id="penulis" placeholder="Masukkan nama penulis"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="number" name="tahun_terbit" placeholder="Tahun Terbit"
+                <!-- Tahun Terbit -->
+                <label for="tahun_terbit" class="text-gray-500 text-sm block mb-1">Tahun Terbit</label>
+                <input type="number" name="tahun_terbit" id="tahun_terbit" placeholder="Masukkan tahun terbit"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="number" name="stok" placeholder="Stok"
+                <!-- Stok -->
+                <label for="stok" class="text-gray-500 text-sm block mb-1">Stok</label>
+                <input type="number" name="stok" id="stok" placeholder="Masukkan jumlah stok"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <select name="kategori_id"
+                <!-- Kategori -->
+                <label for="kategori_id" class="text-gray-500 text-sm block mb-1">Kategori</label>
+                <select name="kategori_id" id="kategori_id"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
                     @foreach ($kategori as $k)
                         <option value="{{ $k->id }}">{{ $k->nama_kategori }}</option>
                     @endforeach
+                </select>
 
-                    <input type="file" name="cover" class="w-full text-sm">
+                <!-- Cover -->
+                <label for="cover" class="text-gray-500 text-sm block mb-1">Cover Buku</label>
+                <input type="file" name="cover" id="cover" class="w-full text-sm">
 
-                    <div class="flex justify-end gap-2 pt-2">
-                        <button type="button" onclick="closeModal()"
-                            class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
-                            Batal
-                        </button>
+                <!-- Tombol -->
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
+                        Batal
+                    </button>
 
-                        <button class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
-                            Simpan
-                        </button>
+                    <button type="submit" class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">
+                        Simpan
+                    </button>
+                </div>
+            </form>
 
-                    </div>
         </div>
-
-        </form>
-
-    </div>
-
     </div>
 
     <!-- ================= MODAL EDIT ================= -->
     <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
 
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Edit Buku</h2>
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">Edit Buku</h2>
-
-            <form method="POST" id="formEdit" enctype="multipart/form-data" class="space-y-3">
+            <form method="POST" id="formEdit" enctype="multipart/form-data" class="space-y-2">
                 @csrf
                 @method('PUT')
 
-                <input type="text" id="editJudul" name="judul"
+                <!-- Judul -->
+                <label for="editJudul" class="text-gray-500 text-sm block mb-1">Judul Buku</label>
+                <input type="text" id="editJudul" name="judul" placeholder="Masukkan judul buku"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="text" id="editPenulis" name="penulis"
+                <!-- Penulis -->
+                <label for="editPenulis" class="text-gray-500 text-sm block mb-1">Penulis</label>
+                <input type="text" id="editPenulis" name="penulis" placeholder="Masukkan nama penulis"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="number" id="editTahunTerbit" name="tahun_terbit"
+                <!-- Tahun Terbit -->
+                <label for="editTahunTerbit" class="text-gray-500 text-sm block mb-1">Tahun Terbit</label>
+                <input type="number" id="editTahunTerbit" name="tahun_terbit" placeholder="Masukkan tahun terbit"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
-                <input type="number" id="editStok" name="stok"
+                <!-- Stok -->
+                <label for="editStok" class="text-gray-500 text-sm block mb-1">Stok</label>
+                <input type="number" id="editStok" name="stok" placeholder="Masukkan jumlah stok"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
+                <!-- Kategori -->
+                <label for="editKategori" class="text-gray-500 text-sm block mb-1">Kategori</label>
                 <select id="editKategori" name="kategori_id"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
                     @foreach ($kategori as $k)
@@ -158,27 +176,24 @@
                     @endforeach
                 </select>
 
-                <input type="file" name="cover" class="w-full text-sm">
+                <!-- Cover -->
+                <label for="cover" class="text-gray-500 text-sm block mb-1">Cover Buku</label>
+                <input type="file" name="cover" id="cover" class="w-full text-sm">
 
-                </select>
-
+                <!-- Tombol -->
                 <div class="flex justify-end gap-2 pt-2">
-
-
                     <button type="button" onclick="closeEdit()"
                         class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
                     </button>
 
-                    <button class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">
+                    <button type="submit" class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">
                         Update
                     </button>
                 </div>
 
             </form>
-
         </div>
-
     </div>
 
     <!-- ================= MODAL DETAIL ================= -->

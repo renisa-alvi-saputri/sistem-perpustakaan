@@ -21,6 +21,7 @@ class PeminjamanController extends Controller
         if (Auth::user()->role === 'anggota') {
             $peminjaman = Peminjaman::with('user', 'buku')
                 ->where('user_id', Auth::id())
+                ->whereIn('status', ['menunggu', 'dipinjam'])
                 ->get();
 
             $buku = Buku::where('stok', '>', 0)->get();
@@ -28,7 +29,10 @@ class PeminjamanController extends Controller
             return view('peminjaman.anggota', compact('peminjaman', 'buku'));
         }
 
-        $peminjaman = Peminjaman::with('user', 'buku')->get();
+        $peminjaman = Peminjaman::with('user', 'buku')
+            ->whereIn('status', ['menunggu', 'dipinjam'])
+            ->get();
+
         $anggota = User::where('role', 'anggota')->get();
         $buku = Buku::where('stok', '>', 0)->get();
 
@@ -58,13 +62,13 @@ class PeminjamanController extends Controller
             'user_id' => Auth::id(),
             'buku_id' => $buku->id,
             'tgl_pinjam' => now(),
-            'tgl_kembali' => now()->addDays(7),
-            'status' => 'dipinjam'
+            'jatuh_tempo' => now()->addDays(7),
+            'status' => 'menunggu'
         ]);
 
         $buku->decrement('stok');
 
-        return back()->with('success', 'Buku berhasil dipinjam');
+        return redirect('/peminjaman')->with('success', 'Buku berhasil dipinjam');
     }
 
     /**
@@ -78,7 +82,7 @@ class PeminjamanController extends Controller
             'user_id' => $request->user_id,
             'buku_id' => $request->buku_id,
             'tgl_pinjam' => $request->tgl_pinjam,
-            'tgl_kembali' => $request->tgl_kembali,
+            'jatuh_tempo' => $request->jatuh_tempo,
         ]);
 
         return back()->with('success', 'Data berhasil diupdate');
@@ -107,8 +111,8 @@ class PeminjamanController extends Controller
 
         // Ambil semua peminjaman yang sudah dikembalikan
         $peminjaman = Peminjaman::with('user', 'buku')
-            ->where('status', 'dikembalikan')   // status menjadi 'dikembalikan'
-            ->orderBy('tgl_dikembalikan', 'desc') //
+            ->whereIn('status', ['dikembalikan', 'selesai'])
+            ->orderBy('tgl_kembali', 'desc')
             ->get();
 
         return view('pengembalian.petugas', compact('peminjaman'));
@@ -129,18 +133,18 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Buku sudah dikembalikan');
         }
 
-        $tglKembali = Carbon::parse($peminjaman->tgl_kembali);
+        $jatuhTempo = Carbon::parse($peminjaman->jatuh_tempo);
         $hariIni = Carbon::now();
         $denda = 0;
 
-        if ($hariIni->gt($tglKembali)) {
-            $hariTelat = $hariIni->diffInDays($tglKembali);
+        if ($hariIni->gt($jatuhTempo)) {
+            $hariTelat = $hariIni->diffInDays($jatuhTempo);
             $denda = $hariTelat * 1000;
         }
 
         $peminjaman->update([
             'status' => 'dikembalikan',
-            'tgl_dikembalikan' => $hariIni,
+            'tgl_kembali' => $hariIni,
             'denda' => $denda
         ]);
 
@@ -154,12 +158,17 @@ class PeminjamanController extends Controller
      */
     public function pengembalianAnggota()
     {
+        $riwayatPengembalian = Peminjaman::with('buku')
+            ->where('user_id', Auth::id())
+            ->where('status', 'dikembalikan')
+            ->get();
+
         $peminjaman = Peminjaman::with('buku')
             ->where('user_id', Auth::id())
             ->where('status', 'dipinjam')
             ->get();
 
-        return view('pengembalian.anggota', compact('peminjaman'));
+        return view('pengembalian.anggota', compact('peminjaman', 'riwayatPengembalian'));
     }
 
     /**
@@ -183,11 +192,39 @@ class PeminjamanController extends Controller
 
         $peminjaman->update([
             'status' => 'dikembalikan',
-            'tgl_dikembalikan' => now()
+            'tgl_kembali' => now()
         ]);
 
         $peminjaman->buku->increment('stok');
 
         return back()->with('success', 'Pengembalian berhasil');
+    }
+
+    public function riwayat()
+    {
+        $peminjaman = Peminjaman::with('buku')
+            ->where('user_id', Auth::id())
+            ->where('status', 'selesai')
+            ->get();
+
+        return view('riwayat.anggota', compact('peminjaman'));
+    }
+
+    public function konfirmasi($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+        $p->status = 'dipinjam';
+        $p->save();
+
+        return redirect()->back();
+    }
+
+    public function selesai($id)
+    {
+        $p = Peminjaman::findOrFail($id);
+        $p->status = 'selesai';
+        $p->save();
+
+        return back()->with('success', 'Status jadi selesai');
     }
 }

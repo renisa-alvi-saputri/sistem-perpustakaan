@@ -14,51 +14,66 @@
                     <th class="py-3 px-4 border">Nama</th>
                     <th class="py-3 px-4 border">Buku</th>
                     <th class="py-3 px-4 border">Tgl Pinjam</th>
-                    <th class="py-3 px-4 border">Tgl Kembali</th>
-                    <th class="py-3 px-4 border">Status</th>
+                    <th class="py-3 px-4 border">Jatuh Tempo</th>
+                    <th class="py-3 px-4 border">Konfirmasi</th>
                     <th class="py-3 px-4 border">Aksi</th>
                 </tr>
             </thead>
 
             <tbody>
-                @foreach ($peminjaman as $p)
-                    <tr>
+                @forelse ($peminjaman as $p)
+                    <tr class="hover:bg-gray-50">
                         <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
                         <td class="py-2 px-4 border">{{ $p->user->name }}</td>
                         <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                         <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
-                        <td class="py-2 px-4 border">
-                            @if ($p->status === 'dikembalikan')
-                                {{ $p->tgl_dikembalikan }}
+                        <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
+                        <td class="py-2 px-4 border text-center">
+                            @if ($p->status == 'menunggu')
+                                <!-- Bisa dicentang untuk konfirmasi -->
+                                <form action="{{ route('peminjaman.konfirmasi', $p->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <input type="checkbox" name="konfirmasi" onchange="this.form.submit()"
+                                        class="h-5 w-5 accent-gray-600">
+                                </form>
+                            @elseif ($p->status == 'dipinjam')
+                                <!-- Status dipinjam, dicentang tapi disabled -->
+                                <input type="checkbox" checked disabled class="h-5 w-5 accent-gray-600">
                             @else
-                                -
+                                <!-- Status dikembalikan / selesai -->
+                                <input type="checkbox" checked disabled class="h-5 w-5 accent-gray-600">
                             @endif
                         </td>
-                        <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
-
-                        <td class="border">
+                        
+                        <!-- AKSI -->
+                        <td class="py-2 px-4 border">
                             <div class="flex justify-center gap-2">
 
-                                <!-- EDIT -->
                                 <button
-                                    onclick="editPinjam({{ $p->id }}, '{{ $p->user_id }}', '{{ $p->buku_id }}', '{{ $p->tgl_pinjam }}', '{{ $p->tgl_kembali }}')"
-                                    class="bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded">
-                                    edit
+                                    onclick="editPinjam({{ $p->id }}, '{{ $p->tgl_pinjam }}', '{{ $p->tgl_kembali }}')"
+                                    class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">
+                                    Edit
                                 </button>
 
-                                <!-- DELETE -->
                                 <form action="{{ route('peminjaman.destroy', $p->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="bg-red-100 text-red-600 px-2 py-0.5 rounded">
-                                        hapus
+                                    <button class="bg-red-100 text-red-600 px-2 py-1 rounded">
+                                        Hapus
                                     </button>
                                 </form>
 
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="7" class="py-4 text-gray-500">
+                            Tidak ada data peminjaman
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
 
         </table>

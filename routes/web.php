@@ -50,6 +50,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengembalian-anggota', [PeminjamanController::class, 'storePengembalianAnggota'])
         ->name('pengembalian.anggota.store');
 
+    // ================= RIWAYAT PEMINJAMAN =================
+    Route::get('/riwayat', [PeminjamanController::class, 'riwayat'])
+        ->name('riwayat');
+
+    //konfirmasi peminjaman oleh petugas
+    Route::put('/peminjaman/{id}/konfirmasi', [PeminjamanController::class, 'konfirmasi'])
+    ->name('peminjaman.konfirmasi');
+
+    //konfirmasi pengembalian oleh petugas
+    Route::put('/peminjaman/{id}/konfirmasi', [PeminjamanController::class, 'konfirmasi'])
+    ->name('peminjaman.konfirmasi');
+
+    // Konfirmasi pengembalian oleh petugas
+    Route::put('/peminjaman/selesai/{id}', [PeminjamanController::class, 'selesai'])
+    ->name('peminjaman.selesai');
+
     // ================= PROFILE =================
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
