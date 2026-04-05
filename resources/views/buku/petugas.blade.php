@@ -90,8 +90,12 @@
 
                 <!-- Judul -->
                 <label for="judul" class="text-gray-500 text-sm block mb-1">Judul Buku</label>
-                <input type="text" name="judul" id="judul" placeholder="Masukkan judul buku"
+                <input type="text" name="judul" placeholder="Masukkan judul buku" value="{{ old('judul') }}"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+
+                @error('judul')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
 
                 <!-- Penulis -->
                 <label for="penulis" class="text-gray-500 text-sm block mb-1">Penulis</label>
@@ -150,7 +154,12 @@
                 <!-- Judul -->
                 <label for="editJudul" class="text-gray-500 text-sm block mb-1">Judul Buku</label>
                 <input type="text" id="editJudul" name="judul" placeholder="Masukkan judul buku"
+                    value="{{ old('judul', session('edit.judul') ?? '') }}"
                     class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+
+                @error('judul')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
 
                 <!-- Penulis -->
                 <label for="editPenulis" class="text-gray-500 text-sm block mb-1">Penulis</label>
@@ -310,5 +319,16 @@
         function closeDelete() {
             document.getElementById('modalDelete').classList.add('hidden');
         }
+
+        //<!--Jika error judul tambah buku-- >
+        @if ($errors->has('judul') && !session('edit'))
+            openModal();
+        @endif
+
+        //<!--Jika error judul edit buku-- >
+        @if (session('edit'))
+            let edit = @json(session('edit'));
+            editBuku(edit.id, edit.judul, edit.penulis, edit.stok, edit.kategori_id, edit.tahun_terbit);
+        @endif
     </script>
 @endsection

@@ -139,7 +139,7 @@ class PeminjamanController extends Controller
 
         if ($hariIni->gt($jatuhTempo)) {
             $hariTelat = $hariIni->diffInDays($jatuhTempo);
-            $denda = $hariTelat * 1000;
+            $denda = $hariTelat * 2000; // denda Rp2.000 per hari
         }
 
         $peminjaman->update([
@@ -202,6 +202,16 @@ class PeminjamanController extends Controller
 
     public function riwayat()
     {
+        // Kalau kepala
+        if (Auth::user()->role === 'kepala') {
+            $peminjaman = Peminjaman::with('user', 'buku')
+                ->where('status', 'selesai') // 🔥 filter di sini
+                ->get();
+
+            return view('riwayat.kepala', compact('peminjaman'));
+        }
+
+        // Kalau anggota
         $peminjaman = Peminjaman::with('buku')
             ->where('user_id', Auth::id())
             ->where('status', 'selesai')

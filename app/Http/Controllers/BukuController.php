@@ -14,7 +14,6 @@ class BukuController extends Controller
     {
         $query = Buku::with('kategori');
 
-        // SEARCH
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('judul', 'like', '%' . $request->search . '%')
@@ -29,14 +28,27 @@ class BukuController extends Controller
             return view('buku.petugas', compact('buku', 'kategori'));
         }
 
+        if (Auth::user()->role == 'kepala') {
+            return view('buku.kepala', compact('buku'));
+        }
+
         return view('buku.anggota', compact('buku'));
     }
 
     // ================== STORE ==================
     public function store(Request $request)
     {
-        $namaFile = null;
+        $request->validate([
+            'judul' => 'required|unique:bukus,judul', // unik
+            'penulis' => 'required',
+            'stok' => 'required|integer|min:0',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'tahun_terbit' => 'required|integer',
+        ], [
+            'judul.unique' => 'Judul buku sudah ada, silakan ganti', // pesan duplikat
+        ]);
 
+        $namaFile = null;
         if ($request->hasFile('cover')) {
             $file = $request->file('cover');
             $namaFile = time() . '.' . $file->getClientOriginalExtension();
@@ -60,15 +72,21 @@ class BukuController extends Controller
     {
         $buku = Buku::findOrFail($id);
 
+        $request->validate([
+            'judul' => 'required|unique:bukus,judul,' . $buku->id,
+            'penulis' => 'required',
+            'stok' => 'required|integer|min:0',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'tahun_terbit' => 'required|integer',
+        ], [
+            'judul.unique' => 'Judul buku sudah ada, silakan ganti',
+        ]);
+
         $namaFile = $buku->cover;
-
         if ($request->hasFile('cover')) {
-
-            // hapus cover lama
             if ($buku->cover && file_exists(public_path('cover/' . $buku->cover))) {
                 unlink(public_path('cover/' . $buku->cover));
             }
-
             $file = $request->file('cover');
             $namaFile = time() . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('cover'), $namaFile);

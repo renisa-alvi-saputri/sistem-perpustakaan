@@ -186,14 +186,14 @@
                     </a>
                 </li>
 
-                <!-- Peminjaman -->
+                <!-- Riwayat -->
                 <li>
-                    <a href="/peminjaman"
+                    <a href="/riwayat"
                         class="flex items-center gap-3 px-4 py-3 text-lg
-            {{ request()->is('peminjaman') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+            {{ request()->is('riwayat') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
 
-                        <i class="fa-solid fa-user-pen w-6 text-center"></i>
-                        Peminjaman
+                        <i class="fa-solid fa-chart-bar w-6 text-center"></i>
+                        Laporan
                     </a>
                 </li>
             @endif
@@ -224,7 +224,7 @@
                 class="hidden absolute right-0 mt-3 w-48 bg-white text-gray-700 rounded-xl shadow-lg overflow-hidden border">
 
                 <!-- PROFILE -->
-                <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100">
+                <a href="{{ route('profile') }}" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-100">
                     <i class="fa-solid fa-user"></i>
                     Profile
                 </a>

@@ -56,19 +56,25 @@ Route::middleware('auth')->group(function () {
 
     //konfirmasi peminjaman oleh petugas
     Route::put('/peminjaman/{id}/konfirmasi', [PeminjamanController::class, 'konfirmasi'])
-    ->name('peminjaman.konfirmasi');
+        ->name('peminjaman.konfirmasi');
 
     //konfirmasi pengembalian oleh petugas
     Route::put('/peminjaman/{id}/konfirmasi', [PeminjamanController::class, 'konfirmasi'])
-    ->name('peminjaman.konfirmasi');
+        ->name('peminjaman.konfirmasi');
 
     // Konfirmasi pengembalian oleh petugas
     Route::put('/peminjaman/selesai/{id}', [PeminjamanController::class, 'selesai'])
-    ->name('peminjaman.selesai');
+        ->name('peminjaman.selesai');
 
     // ================= PROFILE =================
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile', function () {
+        return view('profile.index');
+    })->name('profile');
+
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 

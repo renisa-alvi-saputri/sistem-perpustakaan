@@ -17,6 +17,7 @@
                     <th class="py-3 px-4 border">Tgl Pinjam</th>
                     <th class="py-3 px-4 border">Jatuh Tempo</th>
                     <th class="py-3 px-4 border">Tgl Kembali</th>
+                    <th class="py-3 px-4 border">Denda</th>
                     <th class="py-3 px-4 border">Konfirmasi</th>
                 </tr>
             </thead>
@@ -31,6 +32,22 @@
                             <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
                             <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
                             <td class="py-2 px-4 border">{{ $p->tgl_kembali ?? '-' }}</td>
+                            <td class="py-2 px-4 border">
+                                @php
+                                    $dendaPerHari = 2000;
+                                    $jatuhTempo = \Carbon\Carbon::parse($p->jatuh_tempo);
+                                    $tglKembali = $p->tgl_kembali
+                                        ? \Carbon\Carbon::parse($p->tgl_kembali)
+                                        : \Carbon\Carbon::now();
+
+                                    $selisih = $jatuhTempo->diffInDays($tglKembali, false);
+                                    $denda = $selisih > 0 ? $selisih * $dendaPerHari : 0;
+                                @endphp
+
+                                <span class="{{ $denda > 0 ? 'text-red-600 font-semibold' : 'text-gray-500' }}">
+                                    {{ $denda > 0 ? 'Rp' . number_format($denda, 0, ',', '.') : '-' }}
+                                </span>
+                            </td>
                             <td class="py-2 px-4 border">
                                 <form action="{{ route('peminjaman.selesai', $p->id) }}" method="POST">
                                     @csrf

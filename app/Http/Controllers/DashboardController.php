@@ -14,12 +14,20 @@ class DashboardController extends Controller
     {
         $role = Auth::user()->role;
 
-        // ambil data dari database
+        // ================= DATA =================
         $jumlahBuku = Buku::count();
         $jumlahKategori = Kategori::count();
         $jumlahAnggota = User::where('role', 'anggota')->count();
+
+        // Default: dipinjam
         $jumlahPinjaman = Peminjaman::where('status', 'dipinjam')->count();
 
+        // 👑 Kepala: selesai
+        if ($role == 'kepala') {
+            $jumlahPinjaman = Peminjaman::where('status', 'selesai')->count();
+        }
+
+        // ================= VIEW =================
         if ($role == 'anggota') {
             return view('dashboard.anggota', compact(
                 'jumlahBuku',
