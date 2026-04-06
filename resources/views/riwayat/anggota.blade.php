@@ -43,7 +43,19 @@
                                     {{ $denda > 0 ? 'Rp' . number_format($denda, 0, ',', '.') : '-' }}
                                 </span>
                             </td>
-                            <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
+                            <td class="py-2 px-4 border">
+                                @if ($p->status === 'selesai')
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 text-green-800">
+                                        ✅ Selesai
+                                    </span>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
+                                        {{ ucfirst($p->status) }}
+                                    </span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

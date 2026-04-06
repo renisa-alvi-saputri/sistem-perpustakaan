@@ -69,7 +69,19 @@
                         <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
                         <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
                         <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
-                        <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
+                        <td class="py-2 px-4 border">
+                            @if ($p->status === 'dikembalikan')
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-200 text-yellow-800">
+                                     ⏳ Menunggu
+                                </span>
+                            @else
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
+                                    {{ ucfirst($p->status) }}
+                                </span>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

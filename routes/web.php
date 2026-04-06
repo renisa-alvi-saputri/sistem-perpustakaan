@@ -7,6 +7,7 @@ use App\Http\Controllers\BukuController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LaporanController;
 
 // Redirect default ke login
 Route::redirect('/', '/login');
@@ -65,6 +66,9 @@ Route::middleware('auth')->group(function () {
     // Konfirmasi pengembalian oleh petugas
     Route::put('/peminjaman/selesai/{id}', [PeminjamanController::class, 'selesai'])
         ->name('peminjaman.selesai');
+
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])->name('laporan.pdf');
 
     // ================= PROFILE =================
     Route::get('/profile', function () {

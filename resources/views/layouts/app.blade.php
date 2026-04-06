@@ -7,6 +7,9 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- ICON TAB -->
+    <link rel="icon" href="{{ asset('images/logoapk.png') }}">
+
     <!-- ICON (PASTI MUNCUL) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -186,16 +189,13 @@
                     </a>
                 </li>
 
-                <!-- Riwayat -->
-                <li>
-                    <a href="/riwayat"
-                        class="flex items-center gap-3 px-4 py-3 text-lg
-            {{ request()->is('riwayat') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
-
-                        <i class="fa-solid fa-chart-bar w-6 text-center"></i>
-                        Laporan
-                    </a>
-                </li>
+                <!-- Laporan -->
+                <a href="{{ route('laporan.index') }}"
+                    class="flex items-center gap-3 px-4 py-3 text-lg
+   {{ request()->is('laporan') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+                    <i class="fa-solid fa-chart-bar w-6 text-center"></i>
+                    Laporan
+                </a>
             @endif
 
         </ul>

@@ -24,7 +24,24 @@
                             <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                             <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
                             <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
-                            <td class="py-2 px-4 border text-blue-600">{{ $p->status }}</td>
+                            <td class="py-2 px-4 border">
+                                @if ($p->status === 'dipinjam')
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-blue-200 text-blue-800">
+                                        📖 Dipinjam
+                                    </span>
+                                @elseif ($p->status === 'menunggu')
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-200 text-yellow-800">
+                                        ⏳ Menunggu
+                                    </span>
+                                @else
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
+                                        {{ ucfirst($p->status) }}
+                                    </span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -5,6 +5,9 @@
     <meta charset="UTF-8">
     <title>Register</title>
 
+    <!-- ICON TAB -->
+    <link rel="icon" href="{{ asset('images/logoapk.png') }}">
+
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>
