@@ -178,6 +178,17 @@
                     </a>
                 </li>
 
+                <!-- Petugas -->
+                <li>
+                    <a href="/petugas"
+                        class="flex items-center gap-3 px-4 py-3 text-lg
+            {{ request()->is('petugas') ? 'text-gray-400 font-semibold border-l-4 border-gray-400 pl-3' : 'text-gray-600 hover:text-gray-400' }}">
+
+                        <i class="fa-solid fa-user w-6 text-center"></i>
+                        Petugas
+                    </a>
+                </li>
+
                 <!-- Buku -->
                 <li>
                     <a href="/buku"

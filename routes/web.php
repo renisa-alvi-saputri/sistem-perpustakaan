@@ -8,6 +8,7 @@ use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PeminjamanController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PetugasController;
 
 // Redirect default ke login
 Route::redirect('/', '/login');
@@ -69,6 +70,14 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])->name('laporan.pdf');
+    Route::get('/kepala/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.detail');
+
+    // ================= PETUGAS =================
+Route::middleware(['auth'])->group(function () {
+    Route::get('/petugas', [PetugasController::class, 'index'])->name('petugas.index');
+    Route::get('/petugas/tambah', [PetugasController::class, 'create'])->name('petugas.create');
+    Route::post('/petugas', [PetugasController::class, 'store'])->name('petugas.store');
+});
 
     // ================= PROFILE =================
     Route::get('/profile', function () {

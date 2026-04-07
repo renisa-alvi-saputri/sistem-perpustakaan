@@ -18,7 +18,7 @@ class Peminjaman extends Model
         'denda'
     ];
 
-    // RELASI KE USER
+    // RELASI KE USER (anggota)
     public function user()
     {
         return $this->belongsTo(User::class);

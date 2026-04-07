@@ -11,9 +11,15 @@ class LaporanController extends Controller
     {
         // Ambil data peminjaman yang statusnya selesai
         $peminjaman = Peminjaman::with('buku')
-                        ->where('status', 'selesai')
-                        ->get();
+            ->where('status', 'selesai')
+            ->get();
 
         return view('laporan.index', compact('peminjaman'));
+    }
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::with('user', 'buku')->findOrFail($id);
+
+        return view('laporan.laporan_detail', compact('peminjaman'));
     }
 }
