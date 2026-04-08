@@ -22,7 +22,7 @@
 
             <tbody>
                 @forelse ($peminjaman as $p)
-                    <tr class="hover:bg-gray-50">
+                    <tr>
                         <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
                         <td class="py-2 px-4 border">{{ $p->user->name }}</td>
                         <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
@@ -30,19 +30,26 @@
                         <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
                         <td class="py-2 px-4 border text-center">
                             @if ($p->status == 'menunggu')
-                                <!-- Bisa dicentang untuk konfirmasi -->
-                                <form action="{{ route('peminjaman.konfirmasi', $p->id) }}" method="POST">
+                                <!-- Tombol Konfirmasi -->
+                                <form action="{{ route('peminjaman.konfirmasi', $p->id) }}" method="POST"
+                                    style="display: inline;">
                                     @csrf
                                     @method('PUT')
-                                    <input type="checkbox" name="konfirmasi" onchange="this.form.submit()"
-                                        class="h-5 w-5 accent-gray-600">
+                                    <button type="submit"
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-800 gap-1 hover:bg-gray-300">
+                                        Konfirmasi Peminjaman
+                                    </button>
                                 </form>
                             @elseif ($p->status == 'dipinjam')
-                                <!-- Status dipinjam, dicentang tapi disabled -->
-                                <input type="checkbox" checked disabled class="h-5 w-5 accent-gray-600">
-                            @else
-                                <!-- Status dikembalikan / selesai -->
-                                <input type="checkbox" checked disabled class="h-5 w-5 accent-gray-600">
+                                <!-- Status dikonfirmasi -->
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-200 text-green-800 gap-1">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Dikonfirmasi
+                                </span>
                             @endif
                         </td>
 
@@ -50,43 +57,35 @@
                         <td class="py-2 px-4 border">
                             <div class="flex justify-center gap-2">
 
+                                <!-- EDIT -->
                                 <button
-                                    onclick="editPinjam({{ $p->id }}, '{{ $p->tgl_pinjam }}', '{{ $p->tgl_kembali }}')"
+                                    onclick="editPinjam({{ $p->id }}, '{{ $p->tgl_pinjam }}', '{{ $p->jatuh_tempo }}')"
                                     class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-yellow-100 text-yellow-800 hover:bg-yellow-200 gap-0.5">
-
                                     <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
                                         </path>
                                     </svg>
-
                                     Edit
                                 </button>
-                                <form action="{{ route('peminjaman.destroy', $p->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
 
-                                    <button
-                                        class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-red-100 text-red-800 hover:bg-red-200 gap-0.5">
-
-                                        <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                            </path>
-                                        </svg>
-
-                                        Hapus
-                                    </button>
-                                </form>
+                                <!-- DELETE -->
+                                <button onclick="openDelete({{ $p->id }})"
+                                    class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-red-100 text-red-800 hover:bg-red-200 gap-0.5">
+                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                        </path>
+                                    </svg>
+                                    Hapus
+                                </button>
 
                             </div>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="py-4 text-gray-500">
-                            Tidak ada data peminjaman
-                        </td>
+                        <td colspan="7" class="py-4 text-gray-500">Tidak ada data peminjaman</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -95,12 +94,9 @@
     </div>
 
     <!-- ================= MODAL EDIT ================= -->
-    <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-
+    <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
         <div class="bg-white p-6 rounded-xl w-96">
-
             <h2 class="text-lg font-semibold mb-4">Edit Peminjaman</h2>
-
             <form method="POST" id="formEdit">
                 @csrf
                 @method('PUT')
@@ -116,32 +112,56 @@
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" onclick="closeEdit()" class="bg-gray-400 px-3 py-1 text-white rounded">
+                    <button type="button" onclick="closeEdit()" class="bg-gray-400 px-3 py-1 text-white rounded">Batal</button>
+                    <button class="bg-yellow-500 px-3 py-1 text-white rounded">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MODAL DELETE ================= -->
+    <div id="modalDelete" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-xl w-80 shadow text-center">
+            <h3 class="text-lg font-semibold text-red-500 mb-3">Hapus Peminjaman</h3>
+            <p class="text-sm text-gray-600 mb-6">Yakin ingin menghapus peminjaman ini?</p>
+
+            <form id="formDelete" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="flex justify-center gap-3">
+                    <button type="button" onclick="closeDelete()"
+                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">
                         Batal
                     </button>
-                    <button class="bg-yellow-500 px-3 py-1 text-white rounded">
-                        Update
+                    <button type="submit"
+                        class="px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400">
+                        Hapus
                     </button>
                 </div>
-
             </form>
-
         </div>
     </div>
 
     <!-- ================= SCRIPT ================= -->
     <script>
-        function editPinjam(id, user_id, buku_id, tgl_pinjam, tgl_kembali) {
+        function editPinjam(id, tglPinjam, tglKembali) {
             document.getElementById('modalEdit').classList.remove('hidden');
-
-            document.getElementById('editPinjam').value = tgl_pinjam;
-            document.getElementById('editKembali').value = tgl_kembali;
-
+            document.getElementById('editPinjam').value = tglPinjam;
+            document.getElementById('editKembali').value = tglKembali;
             document.getElementById('formEdit').action = "/peminjaman/" + id;
         }
 
         function closeEdit() {
-            document.getElementById('modalEdit').classList.add('hidden')
+            document.getElementById('modalEdit').classList.add('hidden');
+        }
+
+        function openDelete(id) {
+            document.getElementById('modalDelete').classList.remove('hidden');
+            document.getElementById('formDelete').action = "/peminjaman/" + id;
+        }
+
+        function closeDelete() {
+            document.getElementById('modalDelete').classList.add('hidden');
         }
     </script>
 

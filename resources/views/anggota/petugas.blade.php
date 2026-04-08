@@ -87,7 +87,7 @@
 
             <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Tambah Anggota</h2>
 
-            <form method="POST" action="{{ route('anggota.store') }}" class="space-y-2">
+            <form method="POST" action="{{ route('anggota.store') }}" autocomplete="off" class="space-y-2">
                 @csrf
 
                 <!-- Nama -->
@@ -108,6 +108,16 @@
                     <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
+
+                <!-- Password -->
+                <label for="password" class="text-gray-500 text-sm block mb-1">Password</label>
+                <input type="password" name="password" id="password" placeholder="Masukkan password" autocomplete="new-password"
+                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+
+                <!-- Konfirmasi Password -->
+                <label for="password_confirmation" class="text-gray-500 text-sm block mb-1">Konfirmasi Password</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Ulangi password"
+                    autocomplete="new-password" class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
                 <!-- Tombol -->
                 <div class="flex justify-end gap-2 pt-2">
@@ -132,7 +142,7 @@
 
             <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">Edit Anggota</h2>
 
-            <form method="POST" id="formEdit">
+            <form method="POST" id="formEdit" autocomplete="off">
                 @csrf
                 @method('PUT')
 
@@ -153,6 +163,11 @@
                     <option value="Laki-laki">Laki-laki</option>
                     <option value="Perempuan">Perempuan</option>
                 </select>
+
+                <!-- Password (Opsional) -->
+                <label for="editPassword" class="text-gray-500 text-sm block mt-2 mb-1">Password Baru (Opsional)</label>
+                <input type="password" id="editPassword" name="password" placeholder="Kosongkan jika tidak ingin mengubah"
+                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
 
                 <div class="flex justify-end gap-2 pt-2">
                     <button type="button" onclick="closeEdit()"
@@ -219,6 +234,7 @@
             document.getElementById('editNama').value = nama
             document.getElementById('editEmail').value = email
             document.getElementById('editJK').value = jenis_kelamin
+            document.getElementById('editPassword').value = '' // Kosongkan password field
             document.getElementById('formEdit').action = "/anggota/" + id
         }
 

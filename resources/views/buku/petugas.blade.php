@@ -19,84 +19,104 @@
 
     </div>
 
-    <!-- LIST BUKU -->
-    <div class="grid grid-cols-3 gap-6">
+    <!-- TABEL -->
+    <div class="bg-white rounded-xl shadow overflow-hidden">
 
-        @foreach ($buku as $b)
-            <div class="bg-white rounded-xl shadow-md flex overflow-hidden">
+        <table class="w-full text-sm text-center border">
 
-                <!-- COVER -->
-                <img src="{{ $b->cover ? asset('cover/' . $b->cover) : 'https://picsum.photos/120/160' }}"
-                    class="w-32 h-44 object-cover">
+            <thead class="bg-gray-100 uppercase text-xs text-gray-600">
+                <tr>
+                    <th class="py-3 border">No</th>
+                    <th class="py-3 border">Cover</th>
+                    <th class="py-3 border">Judul</th>
+                    <th class="py-3 border">Penulis</th>
+                    <th class="py-3 border">Kategori</th>
+                    <th class="py-3 border">Stok</th>
+                    <th class="py-3 border">Tahun</th>
+                    <th class="py-3 border">Aksi</th>
+                </tr>
+            </thead>
 
-                <!-- DETAIL -->
-                <div class="p-4 pt-6 flex flex-col flex-1">
+            <tbody>
+                @foreach ($buku as $b)
+                    <tr class="hover:bg-gray-50">
 
-                    <div>
-                        <h3 class="font-semibold text-lg text-[#5C7F9C]">
+                        <td class="py-4 border w-16 text-center">{{ $loop->iteration }}</td>
+
+                        <td class="py-4 border">
+                            <img src="{{ $b->cover ? asset('cover/' . $b->cover) : 'https://picsum.photos/80/120' }}"
+                                class="w-16 h-24 object-contain rounded mx-auto">
+                        </td>
+
+                        <td class="py-4 border text-center">
                             {{ $b->judul }}
-                        </h3>
+                        </td>
 
-                        <p class="text-sm text-gray-600">
-                            Kategori :
-                            <span class="text-gray-600">
-                                {{ $b->kategori->nama_kategori ?? '-' }}
-                            </span>
-                        </p>
+                        <td class="py-4 border text-center">
+                            {{ $b->penulis }}
+                        </td>
 
-                        <p class="text-sm text-gray-600">Stok : {{ $b->stok }}</p>
-                    </div>
+                        <td class="py-4 border text-center">
+                            {{ $b->kategori->nama_kategori ?? '-' }}
+                        </td>
+                        <td class="py-4 border">
+                            {{ $b->stok }}
+                        </td>
 
-                    <!-- BUTTON -->
-                    <div class="flex gap-2 mt-3 text-sm items-center">
+                        <td class="py-4 border">
+                            {{ $b->tahun_terbit ?? '-' }}
+                        </td>
 
+                        <td class="py-4 border">
+                            <div class="flex justify-center items-center gap-2">
 
-                        <!-- DETAIL -->
-                        <button
-                            onclick="showDetail('{{ $b->id }}', '{{ $b->judul }}', '{{ $b->penulis }}', '{{ $b->stok }}', '{{ $b->kategori->nama_kategori ?? '-' }}', '{{ $b->cover }}', '{{ $b->tahun_terbit }}')"
-                            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800 hover:bg-blue-200 transition duration-200 gap-0.5">
+                                <!-- DETAIL -->
+                                <button
+                                    onclick="showDetail('{{ $b->id }}', '{{ $b->judul }}', '{{ $b->penulis }}', '{{ $b->stok }}', '{{ $b->kategori->nama_kategori ?? '-' }}', '{{ $b->cover }}', '{{ $b->tahun_terbit }}')"
+                                    class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-blue-100 text-blue-800 hover:bg-blue-200 gap-0.5">
 
-                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
+                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
 
-                            Detail
-                        </button>
+                                    Detail
+                                </button>
 
-                        <!-- EDIT -->
-                        <button
-                            onclick="editBuku({{ $b->id }}, '{{ $b->judul }}', '{{ $b->penulis }}', {{ $b->stok }}, {{ $b->kategori_id }}, {{ $b->tahun_terbit ?? 0 }})"
-                            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-yellow-100 text-yellow-800 hover:bg-yellow-200 transition duration-200 gap-0.5">
+                                <!-- EDIT -->
+                                <button
+                                    onclick="editBuku({{ $b->id }}, '{{ $b->judul }}', '{{ $b->penulis }}', {{ $b->stok }}, {{ $b->kategori_id }}, {{ $b->tahun_terbit ?? 0 }})"
+                                    class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-yellow-100 text-yellow-800 hover:bg-yellow-200 gap-0.5">
 
-                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
+                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                        </path>
+                                    </svg>
 
-                            Edit
-                        </button>
+                                    Edit
+                                </button>
 
-                        <!-- DELETE -->
-                        <button onclick="openDelete({{ $b->id }})"
-                            class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-red-100 text-red-800 hover:bg-red-200 transition duration-200 gap-0.5">
+                                <!-- DELETE -->
+                                <button onclick="openDelete({{ $b->id }})"
+                                    class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] bg-red-100 text-red-800 hover:bg-red-200 gap-0.5">
 
-                            <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                </path>
-                            </svg>
+                                    <svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                        </path>
+                                    </svg>
 
-                            Hapus
-                        </button>
+                                    Hapus
+                                </button>
 
-                    </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
 
-                </div>
-
-            </div>
-        @endforeach
+        </table>
 
     </div>
 

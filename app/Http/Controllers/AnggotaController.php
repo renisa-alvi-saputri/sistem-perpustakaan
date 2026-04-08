@@ -26,6 +26,12 @@ class AnggotaController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|unique:users,name',
+            'email' => 'required|email|unique:users,email',
+            'jenis_kelamin' => 'required',
+        ]);
+
         User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -39,6 +45,12 @@ class AnggotaController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|unique:users,name,' . $id,
+            'email' => 'required|email|unique:users,email,' . $id,
+            'jenis_kelamin' => 'required',
+        ]);
+
         $anggota = User::findOrFail($id);
 
         $anggota->update([
