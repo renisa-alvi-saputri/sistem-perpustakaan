@@ -14,8 +14,8 @@
     </div>
 
     <!-- AREA TABEL YANG AKAN DICETAK / PDF -->
-    <div class="area-print px-2 py-2">
-        <div class="bg-white rounded-xl shadow overflow-hidden">
+    <div class="area-print px-2 py-2 relative z-0">
+        <div class="bg-white rounded-xl shadow">
             <table class="w-full text-sm text-center border">
                 <thead class="bg-gray-100 text-gray-600">
                     <tr>
@@ -55,20 +55,18 @@
                                         {{ $denda > 0 ? 'Rp' . number_format($denda, 0, ',', '.') : '-' }}
                                     </span>
                                 </td>
-                                <td class="py-2 px-4 border">
+                                <td class="py-2 px-4 border text-center">
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 text-green-800">
+                                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium
+        bg-green-100 text-green-800 border border-green-200">
                                         Selesai
                                     </span>
                                 </td>
+
                                 <td class="py-2 px-4 border text-center">
                                     <button onclick="window.location='{{ route('laporan.detail', $p->id) }}'"
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-               bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors duration-200 gap-1">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
+                                        class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium
+        bg-blue-100 text-blue-800 border border-blue-200 hover:bg-blue-200 transition">
                                         Detail
                                     </button>
                                 </td>
@@ -80,73 +78,73 @@
         </div>
     </div>
 
-@endsection
+    <!-- CSS PRINT & STYLE FIX -->
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
 
-<!-- CSS PRINT & STYLE FIX -->
-<style>
-    @media print {
-        body * {
-            visibility: hidden;
+            .area-print,
+            .area-print * {
+                visibility: visible;
+            }
+
+            .area-print {
+                position: relative;
+                width: 100%;
+                left: 0;
+                top: 0;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                word-wrap: break-word;
+            }
         }
+    </style>
 
-        .area-print,
-        .area-print * {
-            visibility: visible;
-        }
+    <!-- SCRIPT HTML2PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-        .area-print {
-            position: relative;
-            width: 100%;
-            left: 0;
-            top: 0;
-        }
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("cetak-laporan").addEventListener("click", () => {
+                const element = document.querySelector(".area-print");
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+                const today = new Date();
+                const dd = String(today.getDate()).padStart(2, '0');
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const yyyy = today.getFullYear();
+                const filename = `laporan-peminjaman-${yyyy}${mm}${dd}.pdf`;
 
-        th,
-        td {
-            word-wrap: break-word;
-        }
-    }
-</style>
-
-<!-- SCRIPT HTML2PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("cetak-laporan").addEventListener("click", () => {
-            const element = document.querySelector(".area-print");
-
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const yyyy = today.getFullYear();
-            const filename = `laporan-peminjaman-${yyyy}${mm}${dd}.pdf`;
-
-            html2pdf().set({
-                margin: [0.2, 0.2, 0.2, 0.2], // margin in inch
-                filename: filename,
-                image: {
-                    type: 'jpeg',
-                    quality: 1
-                },
-                html2canvas: {
-                    scale: 2,
-                    scrollY: 0
-                },
-                jsPDF: {
-                    unit: 'in',
-                    format: 'a4',
-                    orientation: 'landscape' // supaya semua kolom muat
-                },
-                pagebreak: {
-                    mode: ['css', 'legacy']
-                } // biar tabel panjang pecah halaman
-            }).from(element).save();
+                html2pdf().set({
+                    margin: [0.2, 0.2, 0.2, 0.2],
+                    filename: filename,
+                    image: {
+                        type: 'jpeg',
+                        quality: 1
+                    },
+                    html2canvas: {
+                        scale: 2,
+                        scrollY: 0
+                    },
+                    jsPDF: {
+                        unit: 'in',
+                        format: 'a4',
+                        orientation: 'landscape'
+                    },
+                    pagebreak: {
+                        mode: ['css', 'legacy']
+                    }
+                }).from(element).save();
+            });
         });
-    });
-</script>
+    </script>
+
+@endsection

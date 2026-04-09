@@ -50,26 +50,29 @@
                             </td>
                             <td class="py-2 px-4 border text-center">
                                 @if ($p->status == 'dikembalikan')
-                                    <!-- Tombol Konfirmasi Selesai -->
-                                    <form action="{{ route('peminjaman.selesai', $p->id) }}" method="POST"
-                                        style="display: inline;">
+                                    <!-- Tombol Konfirmasi Pengembalian -->
+                                    <form action="{{ route('peminjaman.selesai', $p->id) }}" method="POST" class="inline">
                                         @csrf
                                         @method('PUT')
+
                                         <button type="submit"
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-gray-100 text-gray-800 gap-1 hover:bg-gray-300">
+                                            class="inline-flex items-center gap-1 bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
+
+                                            <i class="fa-solid fa-check"></i>
                                             Konfirmasi Pengembalian
                                         </button>
                                     </form>
                                 @else
                                     <!-- Status Selesai -->
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-green-200 text-green-800 gap-1">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        Selesai
-                                    </span>
+                                    <div
+                                        class="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-3 py-1.5 rounded-full">
+
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-green-700">
+                                            <i class="fa-solid fa-check"></i>
+                                            Selesai
+                                        </span>
+
+                                    </div>
                                 @endif
                             </td>
                         </tr>

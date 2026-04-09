@@ -36,19 +36,45 @@ class DashboardController extends Controller
                 'jumlahPinjaman'
             ));
         } elseif ($role == 'petugas') {
+
+            $menunggu = Peminjaman::with('user', 'buku')
+                ->where('status', 'menunggu')
+                ->latest()
+                ->get();
+
+            $aktivitas = Peminjaman::with('user', 'buku')
+                ->latest('updated_at')
+                ->limit(8)
+                ->get();
+
+            $statusData = Peminjaman::selectRaw('status, count(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status');
+
             return view('dashboard.petugas', compact(
                 'jumlahBuku',
                 'jumlahKategori',
                 'jumlahAnggota',
-                'jumlahPinjaman'
+                'jumlahPinjaman',
+                'menunggu',
+                'aktivitas',
+                'statusData'
             ));
         } elseif ($role == 'kepala') {
-            return view('dashboard.kepala', compact(
-                'jumlahBuku',
-                'jumlahKategori',
-                'jumlahAnggota',
-                'jumlahPinjaman'
-            ));
+
+            $jumlahPetugas = User::where('role', 'petugas')->count();
+
+             $statusData = Peminjaman::selectRaw('status, count(*) as total')
+        ->groupBy('status')
+        ->pluck('total', 'status');
+
+    return view('dashboard.kepala', compact(
+        'jumlahBuku',
+        'jumlahKategori',
+        'jumlahPinjaman',
+        'jumlahPetugas',
+        'statusData'
+    ));
         }
     }
 }

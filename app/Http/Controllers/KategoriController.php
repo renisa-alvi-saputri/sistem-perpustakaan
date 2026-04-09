@@ -11,7 +11,9 @@ class KategoriController extends Controller
     // TAMPIL DATA
     public function index()
     {
-        $data = Kategori::all();
+        $data = \App\Models\Kategori::when(request('search'), function ($query) {
+            $query->where('nama_kategori', 'like', '%' . request('search') . '%');
+        })->get();  
         $role = Auth::user()->role;
 
         return view('kategori.' . $role, compact('data'));

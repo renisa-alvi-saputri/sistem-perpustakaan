@@ -20,7 +20,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($peminjaman as $p)
+                    @forelse ($peminjaman as $p)
                         <tr class="hover:bg-gray-50">
                             <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
                             <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
@@ -43,21 +43,34 @@
                                     {{ $denda > 0 ? 'Rp' . number_format($denda, 0, ',', '.') : '-' }}
                                 </span>
                             </td>
-                            <td class="py-2 px-4 border">
+                            <td class="py-2 px-4 border text-center">
                                 @if ($p->status === 'selesai')
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-green-200 text-green-800">
-                                        ✅ Selesai
-                                    </span>
+                                    <div
+                                        class="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-3 py-1.5 rounded-full">
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-green-700">
+                                            <i class="fa-solid fa-check"></i>
+                                            Selesai
+                                        </span>
+                                    </div>
                                 @else
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
-                                        {{ ucfirst($p->status) }}
-                                    </span>
+                                    <div
+                                        class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
+                                        <span class="inline-flex items-center gap-1 text-xs font-medium text-gray-700">
+                                            <i class="fa-solid fa-circle-info"></i>
+                                            {{ ucfirst($p->status) }}
+                                        </span>
+                                    </div>
                                 @endif
                             </td>
                         </tr>
-                    @endforeach
+
+                    @empty
+                        <tr>
+                            <td colspan="8" class="py-4 text-gray-500">
+                                Belum ada data Riwayat Peminjaman
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

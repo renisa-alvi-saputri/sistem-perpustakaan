@@ -4,48 +4,53 @@
 
 @section('content')
 
-    <!-- BUTTON + MODAL PENGEMBALIAN ANGGOTA -->
-    <div class="mb-6">
-        <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow hover:bg-[#4a6d87]">
-            + Pengembalian
-        </button>
-    </div>
+    <!-- BUTTON PENGEMBALIAN -->
+<div class="mb-6">
+    <button onclick="openModal()" class="bg-[#5C7F9C] text-white px-4 py-2 rounded-lg shadow hover:bg-[#4a6d87]">
+        + Pengembalian
+    </button>
+</div>
 
-    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-xl w-96 shadow-lg">
-            <h3 class="text-lg font-semibold mb-4 text-[#5C7F9C] text-center">Pengembalian</h3>
+<!-- MODAL PENGEMBALIAN -->
+<div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
 
-            @if ($peminjaman->isEmpty())
-                <div class="p-4 bg-yellow-100 border border-yellow-300 rounded text-yellow-700 mb-4">Tidak ada buku yang
-                    sedang dipinjam.</div>
-                <div class="flex justify-end">
-                    <button onclick="closeModal()" class="bg-gray-400 px-3 py-1 text-white rounded">Tutup</button>
+        <h3 class="text-lg font-semibold text-[#5C7F9C] mb-1">Pengembalian Buku</h3>
+        <p class="text-xs text-gray-400 mb-4">Pilih buku yang ingin dikembalikan</p>
+
+        @if ($peminjaman->isEmpty())
+            <div class="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 text-yellow-700 text-sm mb-4">
+                Tidak ada buku yang sedang dipinjam.
+            </div>
+            <div class="flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">Tutup</button>
+            </div>
+        @else
+            <form action="{{ route('pengembalian.anggota.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
+
+                <label class="text-gray-500 text-sm block mb-1">Buku</label>
+                <select name="peminjaman_id" required
+                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none text-gray-700 mb-4">
+                    <option value="">Pilih Buku</option>
+                    @foreach ($peminjaman as $item)
+                        <option value="{{ $item->id }}">{{ $item->buku->judul }}</option>
+                    @endforeach
+                </select>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">Batal</button>
+                    <button type="submit"
+                        class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">Kembalikan</button>
                 </div>
-            @else
-                <form action="{{ route('pengembalian.anggota.store') }}" method="POST">
-                    @csrf
+            </form>
+        @endif
 
-                    <input type="hidden" name="user_id" value="{{ Auth::id() }}" />
-
-                    <div class="mb-4">
-                        <select name="peminjaman_id" required class="w-full border p-2 rounded mt-1 text-gray-700">
-                            <option value="" class="text-gray-400">Pilih Buku</option>
-                            @foreach ($peminjaman as $item)
-                                <option value="{{ $item->id }}">{{ $item->buku->judul }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="flex justify-end gap-2">
-                        <button type="button" onclick="closeModal()"
-                            class="bg-gray-400 px-3 py-1 text-white rounded hover:bg-gray-500">Batal</button>
-                        <button type="submit"
-                            class="bg-green-500 px-3 py-1 text-white rounded hover:bg-green-600">Kembalikan</button>
-                    </div>
-                </form>
-            @endif
-        </div>
     </div>
+</div>
 
     <!-- TABEL BUKU YANG DIPINJAM ANGGOTA -->
     <div class="bg-white rounded-xl shadow overflow-hidden">
@@ -62,28 +67,41 @@
             </thead>
 
             <tbody>
-                @foreach ($riwayatPengembalian as $p)
+                @forelse ($riwayatPengembalian as $p)
                     <tr class="hover:bg-gray-50">
                         <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
                         <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                         <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>
                         <td class="py-2 px-4 border">{{ $p->jatuh_tempo }}</td>
                         <td class="py-2 px-4 border">{{ $p->tgl_kembali }}</td>
-                        <td class="py-2 px-4 border">
+                        <td class="py-2 px-4 border text-center">
                             @if ($p->status === 'dikembalikan')
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-yellow-200 text-yellow-800">
-                                     ⏳ Menunggu
-                                </span>
+                                <div
+                                    class="inline-flex items-center gap-2 bg-yellow-100 border border-yellow-200 px-3 py-1.5 rounded-full">
+                                    <span class="inline-flex items-center gap-1 text-xs font-medium text-yellow-700">
+                                        <i class="fa-solid fa-clock"></i>
+                                        Menunggu Konfirmasi
+                                    </span>
+                                </div>
                             @else
-                                <span
-                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">
-                                    {{ ucfirst($p->status) }}
-                                </span>
+                                <div
+                                    class="inline-flex items-center gap-2 bg-gray-50 border border-gray-200 px-3 py-1.5 rounded-full">
+                                    <span class="inline-flex items-center gap-1 text-xs font-medium text-gray-700">
+                                        <i class="fa-solid fa-circle-info"></i>
+                                        {{ ucfirst($p->status) }}
+                                    </span>
+                                </div>
                             @endif
                         </td>
                     </tr>
-                @endforeach
+
+                @empty
+                    <tr>
+                        <td colspan="8" class="py-4 text-gray-500">
+                            Belum ada data pengembalian
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

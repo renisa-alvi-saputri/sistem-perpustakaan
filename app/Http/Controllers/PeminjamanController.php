@@ -17,27 +17,27 @@ class PeminjamanController extends Controller
      * - Petugas: lihat semua data
      */
     public function index()
-    {
-        if (Auth::user()->role === 'anggota') {
-            $peminjaman = Peminjaman::with('user', 'buku')
-                ->where('user_id', Auth::id())
-                ->whereIn('status', ['menunggu', 'dipinjam'])
-                ->get();
-
-            $buku = Buku::where('stok', '>', 0)->get();
-
-            return view('peminjaman.anggota', compact('peminjaman', 'buku'));
-        }
-
+{
+    if (Auth::user()->role === 'anggota') {
         $peminjaman = Peminjaman::with('user', 'buku')
-            ->whereIn('status', ['menunggu', 'dipinjam'])
+            ->where('user_id', Auth::id())
+            ->whereIn('status', ['menunggu', 'dipinjam', 'ditolak']) // tambah ditolak
             ->get();
 
-        $anggota = User::where('role', 'anggota')->get();
         $buku = Buku::where('stok', '>', 0)->get();
 
-        return view('peminjaman.petugas', compact('peminjaman', 'anggota', 'buku'));
+        return view('peminjaman.anggota', compact('peminjaman', 'buku'));
     }
+
+    $peminjaman = Peminjaman::with('user', 'buku')
+        ->whereIn('status', ['menunggu', 'dipinjam', 'ditolak']) // hapus where user_id
+        ->get();
+
+    $anggota = User::where('role', 'anggota')->get();
+    $buku = Buku::where('stok', '>', 0)->get();
+
+    return view('peminjaman.petugas', compact('peminjaman', 'anggota', 'buku'));
+}
 
     /**
      * Proses peminjaman buku oleh anggota
@@ -68,34 +68,7 @@ class PeminjamanController extends Controller
 
         $buku->decrement('stok');
 
-        return redirect('/peminjaman')->with('success', 'Buku berhasil dipinjam');
-    }
-
-    /**
-     * Update data peminjaman (umumnya oleh petugas)
-     */
-    public function update(Request $request, $id)
-    {
-        $peminjaman = Peminjaman::findOrFail($id);
-
-        $peminjaman->update([
-            'user_id' => $request->user_id,
-            'buku_id' => $request->buku_id,
-            'tgl_pinjam' => $request->tgl_pinjam,
-            'jatuh_tempo' => $request->jatuh_tempo,
-        ]);
-
-        return back()->with('success', 'Data berhasil diupdate');
-    }
-
-    /**
-     * Hapus data peminjaman
-     */
-    public function destroy($id)
-    {
-        Peminjaman::findOrFail($id)->delete();
-
-        return back()->with('success', 'Data berhasil dihapus');
+       return back()->with('success', 'Buku berhasil dipinjam!');
     }
 
     /**
@@ -237,6 +210,15 @@ class PeminjamanController extends Controller
 
         return back()->with('success', 'Status jadi selesai');
     }
+    public function tolak(Request $request, $id)
+{
+    $p = Peminjaman::findOrFail($id);
+    $p->status = 'ditolak';
+    $p->alasan_tolak = $request->alasan_tolak;
+    $p->save();
 
-    
+    $p->buku->increment('stok');
+
+    return back()->with('success', 'Peminjaman ditolak.');
+}
 }

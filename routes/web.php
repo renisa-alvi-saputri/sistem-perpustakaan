@@ -64,6 +64,8 @@ Route::middleware('auth')->group(function () {
     Route::put('/peminjaman/{id}/konfirmasi', [PeminjamanController::class, 'konfirmasi'])
         ->name('peminjaman.konfirmasi');
 
+    Route::put('/peminjaman/{id}/tolak', [PeminjamanController::class, 'tolak'])->name('peminjaman.tolak');
+
     // Konfirmasi pengembalian oleh petugas
     Route::put('/peminjaman/selesai/{id}', [PeminjamanController::class, 'selesai'])
         ->name('peminjaman.selesai');
@@ -71,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/pdf', [LaporanController::class, 'downloadPdf'])->name('laporan.pdf');
     Route::get('/kepala/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.detail');
+    
 
     // ================= PETUGAS =================
     Route::middleware(['auth'])->group(function () {

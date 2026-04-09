@@ -77,97 +77,142 @@
     </div>
 
     <!-- ================= MODAL TAMBAH PETUGAS ================= -->
-    <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div class="bg-white p-5 rounded-2xl w-96 shadow-lg">
+    <div id="modal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-            <h2 class="text-xl font-semibold mb-2 text-[#5C7F9C]">Tambah Petugas</h2>
+        <div class="bg-white p-6 rounded-2xl w-96 shadow-xl">
 
-            <form method="POST" action="{{ route('petugas.store') }}" autocomplete="off" class="space-y-2">
+            <h2 class="text-lg font-semibold text-[#5C7F9C] mb-5">
+                Tambah Petugas
+            </h2>
+
+            <form method="POST" action="{{ route('petugas.store') }}" autocomplete="off" class="space-y-4">
                 @csrf
 
-                <label class="text-gray-500 text-sm block mb-1">Nama</label>
-                <input type="text" name="name" placeholder="Masukkan nama"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                <!-- TRIK ANTI AUTOFILL -->
+                <input type="text" name="fakeuser" class="hidden">
+                <input type="password" name="fakepassword" class="hidden">
 
-                <label class="text-gray-500 text-sm block mb-1">Email</label>
-                <input type="email" name="email" placeholder="Masukkan email"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-
-                <label class="text-gray-500 text-sm block mb-1">Jenis Kelamin</label>
-                <select name="jenis_kelamin"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-                    <option value="">Pilih Jenis Kelamin</option>
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
-                </select>
-
-                <label class="text-gray-500 text-sm block mb-1">Password</label>
-                <input type="password" name="password" placeholder="Masukkan password" autocomplete="new-password"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-
-                <label class="text-gray-500 text-sm block mb-1">Konfirmasi Password</label>
-                <input type="password" name="password_confirmation" placeholder="Ulangi password"
-                    autocomplete="new-password"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-
-                <div class="flex justify-end gap-2 pt-2">
-                    <button type="button" onclick="closeModal()"
-                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">Batal</button>
-                    <button type="submit"
-                        class="px-4 py-1 bg-green-500 text-white rounded-lg hover:bg-green-400">Simpan</button>
+                <!-- Nama -->
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Nama</label>
+                    <input type="text" name="name" placeholder="Masukkan nama" autocomplete="off"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
                 </div>
+
+                <!-- Email -->
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Email</label>
+                    <input type="email" name="email" placeholder="Masukkan email" autocomplete="new-email"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
+
+                <!-- Jenis Kelamin -->
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Jenis Kelamin</label>
+                    <select name="jenis_kelamin"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                        <option value="">Pilih Jenis Kelamin</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Password</label>
+                    <input type="password" name="password" placeholder="Masukkan password" autocomplete="new-password"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
+
+                <!-- Konfirmasi Password -->
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Konfirmasi Password</label>
+                    <input type="password" name="password_confirmation" placeholder="Ulangi password"
+                        autocomplete="new-password"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
+
+                <!-- BUTTON -->
+                <div class="flex justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeModal()"
+                        class="px-4 py-1.5 text-sm rounded-lg bg-gray-400 text-white hover:bg-gray-500 transition">
+                        Batal
+                    </button>
+
+                    <button type="submit"
+                        class="px-4 py-1.5 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600 transition shadow">
+                        Simpan
+                    </button>
+                </div>
+
             </form>
 
         </div>
+
     </div>
 
+
     <!-- ================= MODAL EDIT PETUGAS ================= -->
-    <div id="modalEdit" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-        <div class="bg-white p-6 rounded-2xl w-96 shadow-lg">
+    <div id="modalEdit" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-2xl w-96 shadow-xl">
 
-            <h2 class="text-xl font-semibold mb-4 text-[#5C7F9C]">Edit Petugas</h2>
+            <h2 class="text-lg font-semibold text-[#5C7F9C] mb-5">Edit Petugas</h2>
 
-            <form method="POST" id="formEdit" autocomplete="off">
+            <form method="POST" id="formEdit" autocomplete="off" class="space-y-4">
                 @csrf
                 @method('PUT')
 
-                <label class="text-gray-500 text-sm block mb-1">Nama</label>
-                <input type="text" id="editName" name="name" placeholder="Nama"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Nama</label>
+                    <input type="text" id="editName" name="name"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
 
-                <label class="text-gray-500 text-sm block mt-2 mb-1">Email</label>
-                <input type="email" id="editEmail" name="email" placeholder="Email"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Email</label>
+                    <input type="email" id="editEmail" name="email"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
 
-                <label class="text-gray-500 text-sm block mt-2 mb-1">Jenis Kelamin</label>
-                <select id="editJK" name="jenis_kelamin"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
-                    <option value="L">Laki-laki</option>
-                    <option value="P">Perempuan</option>
-                </select>
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Jenis Kelamin</label>
+                    <select id="editJK" name="jenis_kelamin"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                </div>
 
-                <label class="text-gray-500 text-sm block mt-2 mb-1">Password Baru (Opsional)</label>
-                <input type="password" id="editPassword" name="password"
-                    placeholder="Kosongkan jika tidak ingin mengubah"
-                    class="w-full border p-2 rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                <div>
+                    <label class="text-sm text-gray-600 mb-1 block">Password Baru (Opsional)</label>
+                    <input type="password" id="editPassword" name="password"
+                        placeholder="Kosongkan jika tidak ingin mengubah"
+                        class="w-full h-10 px-3 border rounded-lg focus:ring-2 focus:ring-[#5C7F9C] outline-none">
+                </div>
 
-                <div class="flex justify-end gap-2 pt-2">
+                <div class="flex justify-end gap-3 pt-2">
                     <button type="button" onclick="closeEdit()"
-                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">Batal</button>
-                    <button class="px-4 py-1 bg-yellow-500 text-white rounded-lg hover:bg-yellow-400">Update</button>
+                        class="px-4 py-1.5 text-sm rounded-lg bg-gray-400 text-white hover:bg-gray-500 transition">
+                        Batal
+                    </button>
+                    <button
+                        class="px-4 py-1.5 text-sm rounded-lg bg-yellow-500 text-white hover:bg-yellow-600 transition shadow">
+                        Update
+                    </button>
                 </div>
             </form>
 
         </div>
     </div>
 
+
     <!-- ================= MODAL DELETE PETUGAS ================= -->
-    <div id="modalDelete" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div id="modalDelete" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-        <div class="bg-white p-6 rounded-xl w-80 shadow text-center">
+        <div class="bg-white p-6 rounded-2xl w-80 shadow-xl text-center">
 
-            <h3 class="text-lg font-semibold text-[#5C7F9C] mb-3">Hapus Petugas</h3>
-            <p class="text-sm text-gray-600 mb-6">Yakin ingin menghapus petugas ini?</p>
+            <h3 class="text-lg font-semibold text-[#5C7F9C] mb-2">Hapus Petugas</h3>
+            <p class="text-sm text-gray-500 mb-6">Yakin ingin menghapus petugas ini?</p>
 
             <form id="formDelete" method="POST">
                 @csrf
@@ -175,8 +220,13 @@
 
                 <div class="flex justify-center gap-3">
                     <button type="button" onclick="closeDelete()"
-                        class="px-4 py-1 bg-gray-500 text-white rounded-lg hover:bg-gray-400">Batal</button>
-                    <button class="px-4 py-1 bg-red-500 text-white rounded-lg hover:bg-red-400">Hapus</button>
+                        class="px-4 py-1.5 text-sm rounded-lg bg-gray-400 text-white hover:bg-gray-500 transition">
+                        Batal
+                    </button>
+                    <button
+                        class="px-4 py-1.5 text-sm rounded-lg bg-red-500 text-white hover:bg-red-600 transition shadow">
+                        Hapus
+                    </button>
                 </div>
             </form>
 

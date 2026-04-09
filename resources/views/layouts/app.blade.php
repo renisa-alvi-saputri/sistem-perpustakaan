@@ -213,7 +213,7 @@
     </div>
 
     <!-- NAVBAR -->
-    <div class="fixed top-0 left-52 right-0 h-16 bg-[#5C7F9C] flex items-center justify-between px-6 text-white shadow">
+    <div class="fixed top-0 left-52 right-0 h-16 bg-[#5C7F9C] flex items-center justify-between px-6 text-white shadow z-50">
 
         <h1 class="text-xl font-semibold">
             @yield('title', 'Dashboard')
