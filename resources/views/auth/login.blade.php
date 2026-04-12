@@ -9,7 +9,6 @@
     <link rel="icon" href="{{ asset('images/logoapk.png') }}">
 
     <script src="https://cdn.tailwindcss.com"></script>
-
 </head>
 
 <body class="bg-[#567C99] h-screen flex items-center justify-center">
@@ -17,9 +16,12 @@
     <div class="bg-gray-100 w-96 p-8 rounded-xl shadow-lg text-center">
 
         <!-- Logo -->
-        <img src="{{ asset('images/logoapk.png') }}" class="w-24 mx-auto -mt-4 mb-4">
+        <img src="{{ asset('images/logoapk.png') }}" class="w-24 mx-auto -mt-4 mb-2">
 
-        <h3 class="mb-5 text-gray-700">Masukkan Email dan Password</h3>
+        <!-- Judul -->
+        <h2 class="text-xl font-bold text-gray-700 mb-1">S-Perpustakaan</h2>
+
+        <h3 class="mb-2 text-gray-500 text-sm">Masukkan Email dan Password</h3>
 
         <form method="POST" action="{{ route('login') }}" class="space-y-3" autocomplete="off">
 

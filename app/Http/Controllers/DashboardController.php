@@ -14,39 +14,52 @@ class DashboardController extends Controller
     {
         $role = Auth::user()->role;
 
-        // ================= DATA =================
-        $jumlahBuku = Buku::count();
+        // -----------------------------------------------------------------
+        // DATA UMUM — dipakai di semua role
+        // -----------------------------------------------------------------
+        $jumlahBuku     = Buku::count();
         $jumlahKategori = Kategori::count();
-        $jumlahAnggota = User::where('role', 'anggota')->count();
+        $jumlahAnggota  = User::where('role', 'anggota')->count();
 
-        // Default: dipinjam
-        $jumlahPinjaman = Peminjaman::where('status', 'dipinjam')->count();
+        // Jumlah pinjaman berbeda tiap role
+        $jumlahPinjaman = match($role) {
+            'kepala'  => Peminjaman::where('status', 'selesai')->count(),
+            'anggota' => Peminjaman::where('status', 'dipinjam')
+                            ->where('user_id', Auth::id())
+                            ->count(),
+            default   => Peminjaman::where('status', 'dipinjam')->count(),
+        };
 
-        // 👑 Kepala: selesai
-        if ($role == 'kepala') {
-            $jumlahPinjaman = Peminjaman::where('status', 'selesai')->count();
-        }
-
-        // ================= VIEW =================
-        if ($role == 'anggota') {
+        // -----------------------------------------------------------------
+        // DASHBOARD ANGGOTA
+        // -----------------------------------------------------------------
+        if ($role === 'anggota') {
             return view('dashboard.anggota', compact(
                 'jumlahBuku',
                 'jumlahKategori',
                 'jumlahAnggota',
                 'jumlahPinjaman'
             ));
-        } elseif ($role == 'petugas') {
+        }
 
+        // -----------------------------------------------------------------
+        // DASHBOARD PETUGAS
+        // -----------------------------------------------------------------
+        if ($role === 'petugas') {
+            // Peminjaman yang menunggu konfirmasi petugas
             $menunggu = Peminjaman::with('user', 'buku')
                 ->where('status', 'menunggu')
                 ->latest()
+                ->limit(5)
                 ->get();
 
+            // Aktivitas peminjaman terbaru
             $aktivitas = Peminjaman::with('user', 'buku')
                 ->latest('updated_at')
-                ->limit(8)
+                ->limit(5)
                 ->get();
 
+            // Data statistik status untuk diagram donat
             $statusData = Peminjaman::selectRaw('status, count(*) as total')
                 ->groupBy('status')
                 ->pluck('total', 'status');
@@ -60,21 +73,27 @@ class DashboardController extends Controller
                 'aktivitas',
                 'statusData'
             ));
-        } elseif ($role == 'kepala') {
+        }
 
+        // -----------------------------------------------------------------
+        // DASHBOARD KEPALA
+        // -----------------------------------------------------------------
+        if ($role === 'kepala') {
             $jumlahPetugas = User::where('role', 'petugas')->count();
+            $jumlahAnggota = User::where('role', 'anggota')->count();
 
-             $statusData = Peminjaman::selectRaw('status, count(*) as total')
-        ->groupBy('status')
-        ->pluck('total', 'status');
+            $statusData = Peminjaman::selectRaw('status, count(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status');
 
-    return view('dashboard.kepala', compact(
-        'jumlahBuku',
-        'jumlahKategori',
-        'jumlahPinjaman',
-        'jumlahPetugas',
-        'statusData'
-    ));
+            return view('dashboard.kepala', compact(
+                'jumlahBuku',
+                'jumlahKategori',
+                'jumlahPinjaman',
+                'jumlahPetugas',
+                'jumlahAnggota',
+                'statusData'
+            ));
         }
     }
 }

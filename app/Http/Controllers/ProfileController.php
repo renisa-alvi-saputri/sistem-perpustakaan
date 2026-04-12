@@ -7,16 +7,26 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
+    /**
+     * Halaman lihat profil.
+     */
     public function index()
     {
         return view('profile.index');
     }
 
+    /**
+     * Halaman edit profil.
+     */
     public function edit()
     {
         return view('profile.edit');
     }
 
+    /**
+     * Proses update profil.
+     * Password dan foto hanya diupdate jika diisi.
+     */
     public function update(Request $request)
     {
         $user = auth()->user();
@@ -36,12 +46,12 @@ class ProfileController extends Controller
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'photo.image'            => 'File harus berupa gambar.',
             'photo.max'              => 'Ukuran foto maksimal 2MB.',
-            'current_password.required_with' => 'Password lama wajib diisi jika ingin ganti password.',
             'password.min'           => 'Password baru minimal 6 karakter.',
             'password.confirmed'     => 'Konfirmasi password tidak cocok.',
+            'current_password.required_with' => 'Password lama wajib diisi jika ingin ganti password.',
         ];
 
-        // Validasi password hanya jika password baru diisi
+        // Validasi password hanya jika diisi
         if ($request->filled('password')) {
             $rules['current_password'] = 'required_with:password';
             $rules['password']         = 'min:6|confirmed';
@@ -49,7 +59,7 @@ class ProfileController extends Controller
 
         $request->validate($rules, $messages);
 
-        // Cek password lama kalau user mau ganti password
+        // Cek password lama jika user ingin ganti password
         if ($request->filled('password')) {
             if (!Hash::check($request->current_password, $user->password)) {
                 return back()
@@ -64,13 +74,17 @@ class ProfileController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
         ];
 
-        // Update password kalau diisi
+        // Update password jika diisi
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
         }
 
-        // Upload foto kalau ada
+        // Upload foto baru, hapus foto lama jika ada
         if ($request->hasFile('photo')) {
+            if ($user->photo && file_exists(public_path('foto_profile/' . $user->photo))) {
+                unlink(public_path('foto_profile/' . $user->photo));
+            }
+
             $filename = time() . '.' . $request->photo->extension();
             $request->photo->move(public_path('foto_profile'), $filename);
             $data['photo'] = $filename;

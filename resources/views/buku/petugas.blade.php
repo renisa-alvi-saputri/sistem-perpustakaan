@@ -6,13 +6,12 @@
 
     {{-- LOADING + TOAST NOTIFIKASI --}}
     @if (session('success'))
-        <div id="loading"
-            class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
+        <div id="loading" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-30">
             <div class="bg-white rounded-2xl p-6 flex flex-col items-center gap-3 shadow-lg">
                 <svg class="w-10 h-10 text-[#5C7F9C] animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                    </circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
                 </svg>
                 <p class="text-sm text-[#5C7F9C] font-medium">Memproses...</p>
             </div>
@@ -62,7 +61,7 @@
 
         <table class="w-full text-sm text-center border">
 
-            <thead class="bg-gray-100 uppercase text-xs text-gray-600">
+            <thead class="bg-[#5C7F9C] uppercase text-xs text-white">
                 <tr>
                     <th class="py-3 border">No</th>
                     <th class="py-3 border">Cover</th>
@@ -77,7 +76,7 @@
 
             <tbody>
                 @foreach ($buku as $b)
-                    <tr class="hover:bg-gray-50">
+                    <tr>
 
                         <td class="py-4 border w-16 text-center">{{ $loop->iteration }}</td>
 
@@ -242,7 +241,8 @@
 
     <!-- ================= MODAL DETAIL ================= -->
     <div id="modalDetail" onclick="closeDetail()" class="hidden fixed inset-0 bg-black bg-opacity-40 z-[9999]">
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+        <div
+            class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
             bg-white p-6 rounded-2xl w-80 text-center shadow-lg">
 
             <img id="detailCover" class="w-32 h-44 object-cover mx-auto mb-4 rounded shadow">

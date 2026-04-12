@@ -7,7 +7,7 @@
     <div class="px-2 py-2">
         <div class="bg-white rounded-xl shadow overflow-hidden">
             <table class="w-full text-sm text-center border">
-                <thead class="bg-gray-100 text-gray-600">
+                <thead class="bg-[#5C7F9C] text-white">
                     <tr>
                         <th class="py-3 px-4 border">No</th>
                         <th class="py-3 px-4 border">Buku</th>
@@ -21,7 +21,7 @@
 
                 <tbody>
                     @forelse ($peminjaman as $p)
-                        <tr class="hover:bg-gray-50">
+                        <tr>
                             <td class="py-2 px-4 border">{{ $loop->iteration }}</td>
                             <td class="py-2 px-4 border">{{ $p->buku->judul }}</td>
                             <td class="py-2 px-4 border">{{ $p->tgl_pinjam }}</td>

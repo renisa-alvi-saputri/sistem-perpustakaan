@@ -9,7 +9,7 @@
 
         <table class="w-full text-sm text-center border">
 
-            <thead class="bg-gray-100 text-gray-600">
+            <thead class="bg-[#5C7F9C] text-white">
                 <tr>
                     <th class="py-3 px-4 border">No</th>
                     <th class="py-3 px-4 border">Nama</th>

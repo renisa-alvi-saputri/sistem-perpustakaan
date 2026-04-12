@@ -44,7 +44,7 @@
     <div class="bg-white rounded-xl shadow overflow-hidden">
         <table class="w-full text-sm text-center border">
 
-            <thead class="bg-gray-100 text-gray-600">
+            <thead class="bg-[#5C7F9C] text-white">
                 <tr>
                     <th class="py-3 px-4 border">No</th>
                     <th class="py-3 px-4 border">Nama</th>
@@ -80,8 +80,7 @@
                                     </form>
 
                                     <!-- Tombol Tolak -->
-                                    <button type="button"
-                                        onclick="openTolak({{ $p->id }})"
+                                    <button type="button" onclick="openTolak({{ $p->id }})"
                                         class="inline-flex items-center gap-1 bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-full text-xs font-medium text-gray-700 hover:bg-gray-200">
                                         <i class="fa-solid fa-xmark"></i>
                                         Tolak

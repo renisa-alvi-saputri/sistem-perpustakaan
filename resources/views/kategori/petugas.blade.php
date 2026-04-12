@@ -61,17 +61,18 @@
 
         <table class="w-full text-sm text-center border">
 
-            <thead class="bg-gray-100 uppercase text-xs text-gray-600">
+            <thead class="bg-[#5C7F9C] uppercase text-xs text-white">
                 <tr>
                     <th class="py-3 border">No</th>
                     <th class="py-3 border">Nama Kategori</th>
                     <th class="py-3 border">Aksi</th>
+
                 </tr>
             </thead>
 
             <tbody>
                 @foreach ($data as $k)
-                    <tr class="hover:bg-gray-50">
+                    <tr>
                         <td class="py-4 border">{{ $loop->iteration }}</td>
 
                         <td class="py-4 border">{{ $k->nama_kategori }}</td>

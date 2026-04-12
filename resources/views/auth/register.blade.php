@@ -16,7 +16,7 @@
 
     <div class="bg-gray-200 w-96 p-8 rounded-xl shadow-lg text-center">
 
-        <h2 class="text-2xl font-bold mb-6">REGISTER</h2>
+        <h2 class="text-2xl font-bold mb-3">REGISTER</h2>
 
         <form method="POST" action="{{ route('register') }}" class="space-y-3" autocomplete="off">
 

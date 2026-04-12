@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class AnggotaController extends Controller
 {
-    // Otorisasi ditangani di routes/web.php — lihat komentar di bawah file ini
-
     public function index(Request $request)
     {
         $query = User::where('role', 'anggota');
@@ -17,11 +16,17 @@ class AnggotaController extends Controller
             $search = addcslashes($request->search, '%_');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                    ->orWhere('email', 'like', '%' . $search . '%');
+                  ->orWhere('email', 'like', '%' . $search . '%');
             });
         }
 
         $anggota = $query->paginate(20)->withQueryString();
+
+        $user = auth()->user();
+
+        if ($user && $user->role == 'kepala') {
+            return view('anggota.kepala', compact('anggota'));
+        }
 
         return view('anggota.petugas', compact('anggota'));
     }
@@ -33,6 +38,7 @@ class AnggotaController extends Controller
             'email'         => 'required|email|unique:users,email',
             'jenis_kelamin' => 'required',
             'password'      => 'required|min:6|confirmed',
+            'photo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'name.required'          => 'Nama wajib diisi.',
             'email.required'         => 'Email wajib diisi.',
@@ -42,7 +48,15 @@ class AnggotaController extends Controller
             'password.required'      => 'Password wajib diisi.',
             'password.min'           => 'Password minimal 6 karakter.',
             'password.confirmed'     => 'Konfirmasi password tidak cocok.',
+            'photo.image'            => 'File harus berupa gambar.',
+            'photo.max'              => 'Ukuran foto maksimal 2MB.',
         ]);
+
+        // ✅ Upload foto jika ada
+        $photoName = null;
+        if ($request->hasFile('photo')) {
+            $photoName = $request->file('photo')->store('photos', 'public');
+        }
 
         User::create([
             'name'          => $request->name,
@@ -50,6 +64,7 @@ class AnggotaController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'password'      => bcrypt($request->password),
             'role'          => 'anggota',
+            'photo'         => $photoName,
         ]);
 
         return back()->with('success', 'Anggota berhasil ditambahkan.');
@@ -62,6 +77,7 @@ class AnggotaController extends Controller
             'email'         => 'required|email|unique:users,email,' . $id,
             'jenis_kelamin' => 'required',
             'password'      => 'nullable|min:6',
+            'photo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ], [
             'name.required'          => 'Nama wajib diisi.',
             'email.required'         => 'Email wajib diisi.',
@@ -69,6 +85,8 @@ class AnggotaController extends Controller
             'email.unique'           => 'Email ini sudah digunakan akun lain.',
             'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
             'password.min'           => 'Password baru minimal 6 karakter.',
+            'photo.image'            => 'File harus berupa gambar.',
+            'photo.max'              => 'Ukuran foto maksimal 2MB.',
         ]);
 
         $anggota = User::findOrFail($id);
@@ -79,9 +97,16 @@ class AnggotaController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
         ];
 
-        // Hanya update password jika diisi
         if ($request->filled('password')) {
             $data['password'] = bcrypt($request->password);
+        }
+
+        // ✅ Upload foto baru, hapus foto lama jika ada
+        if ($request->hasFile('photo')) {
+            if ($anggota->photo) {
+                Storage::disk('public')->delete($anggota->photo);
+            }
+            $data['photo'] = $request->file('photo')->store('photos', 'public');
         }
 
         $anggota->update($data);
@@ -91,22 +116,15 @@ class AnggotaController extends Controller
 
     public function destroy($id)
     {
-        User::findOrFail($id)->delete();
+        $anggota = User::findOrFail($id);
+
+        // ✅ Hapus foto saat anggota dihapus
+        if ($anggota->photo) {
+            Storage::disk('public')->delete($anggota->photo);
+        }
+
+        $anggota->delete();
 
         return back()->with('success', 'Anggota berhasil dihapus.');
     }
 }
-
-/*
-|--------------------------------------------------------------------------
-| Tambahkan ini di routes/web.php
-|--------------------------------------------------------------------------
-|
-| Route::middleware(['auth', function ($request, $next) {
-|     abort_unless(auth()->user()->role === 'petugas', 403, 'Akses ditolak.');
-|     return $next($request);
-| }])->group(function () {
-|     Route::resource('anggota', AnggotaController::class);
-| });
-|
-*/
